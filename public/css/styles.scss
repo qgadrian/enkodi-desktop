@@ -1,0 +1,232 @@
+$background_color: #424242;
+$secondary_color: #F44336;
+$secondary_color_hover: #EF9A9A;
+$tertiary_color: #BDBDBD;
+
+$text_color: #FAFAFA;
+$disabled_text: #9E9E9E;
+
+$font: normal 1rem Helvetica, Roboto, Calibri, Arial, sans-serif;;
+
+$button_radius: 5px;
+
+$poster_width: 150px;
+$poster_height: 200px;
+
+@import "./components.scss";
+@import "./_volume_bar.scss";
+
+body {
+  background-color: $background_color;
+  color: $text_color;
+  font: $font;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+  span {
+    color: $text_color;
+  }
+}
+
+input[type=button] {
+  @include button(4rem, 2rem);
+}
+
+input[type=button]::hover {
+  @include button_hover();
+}
+
+// Menu
+
+div.main_menu {
+  text-align: right;
+  margin-bottom: 50px;
+
+  a {
+    text-decoration: none;
+    margin-right: 10px;
+
+    & > span {
+      padding: 25px;
+      color: $text_color;
+      position: relative;
+    }
+
+    &.disabled > span {
+      color: $disabled_text;
+      cursor: default;
+    }
+  }
+
+  a:hover {
+    border-bottom: 1px solid $secondary_color;
+  }
+}
+
+// Home
+
+div.container {
+  div.title {
+    text-align: center;
+  }
+
+  div.configuration {
+    width: 100%;
+  }
+
+  div.action {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+
+    & > a.connect {
+      @include button(7rem, 2rem);
+      text-decoration: none;
+      align-self: baseline;
+      position: absolute;
+    }
+
+    & > a.connect:hover {
+      @include button_hover();
+    }
+  }
+}
+
+// Controller
+
+div.control_buttons {
+  div.input, div.actions {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+
+    &>div.row {
+      margin-bottom: 10px;
+    }
+  }
+
+  & div.row > button {
+    background-repeat: no-repeat;
+    background-position: center;;
+    background-size: 20%;
+    vertical-align: middle;
+
+    &.menu {
+      background-image: url('../img/buttons/menu.png');
+    }
+    &.back {
+      background-image: url('../img/buttons/back.png');
+    }
+    &.home {
+      background-image: url('../img/buttons/home.png');
+    }
+  }
+}
+
+// Movies
+div.movies {
+  div.movie {
+    text-align: center;
+    margin-bottom: 20px;
+
+    span.title {
+      display: block;
+      margin-top: 10px;
+    }
+
+    img.thumbnail {
+      @include thumbnail_poster();
+    }
+  }
+}
+
+// Tv shows
+div.tvshows {
+  display: flex;
+  flex-flow: row wrap;
+
+  div.tvshow {
+    width: 25%;
+    text-align: center;
+    margin-bottom: 20px;
+
+    a.seasons > span.title {
+      display: block;
+      margin-top: 10px;
+    }
+
+    img.thumbnail {
+      @include thumbnail_poster();
+    }
+  }
+}
+
+div.seasons {
+  display: flex;
+  flex-flow: row wrap;
+
+  div.season {
+    width: 25%;
+    text-align: center;
+    margin-bottom: 20px;
+
+    a.episodes {
+      text-decoration: none;
+
+      img.thumbnail {
+        @include thumbnail_poster();
+      }
+
+      span.title {
+        margin-top: 10px;
+        display: block;
+        text-align: center;
+      }
+    }
+  }
+}
+
+div.episodes {
+  div.episode {
+    margin-bottom: 10px;
+
+    div.image_actions {
+      position: relative;
+
+      img.thumbnail {
+        display: block;
+        margin: auto;
+        width: 100%;
+        max-width: 800px;
+        height: auto;
+        transition: opacity 0.23s ease;
+      }
+
+      input.play {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        margin: auto;
+        display: none;
+        font-size: 1.2rem;
+        @include button(6rem, 3rem);
+      }
+
+      &:hover {
+        input.play {
+          display: block;
+        }
+
+        img.thumbnail {
+          opacity: 0.23;
+        }
+      }
+    }
+
+    span {
+      display: block;
+    }
+  }
+}

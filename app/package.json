@@ -1,0 +1,15 @@
+{
+  "name": "enkodi",
+  "productName": "Enkodi",
+  "version": "0.10.0",
+  "description": "Remote player for Kodi",
+  "main": "./main.js",
+  "author": {
+    "name": "Adrián Quintás",
+    "email": "qgadrian@gmail.com",
+    "url": "https://github.com/qgadrian"
+  },
+  "license": "MIT",
+  "dependencies": {
+  }
+}
