@@ -1,0 +1,66 @@
+
+$image_action_ratio: 35%;
+$detail_ratio: 65%;
+
+$thumbnail_width: 100%;
+$max_thumbnail_size: 800px;
+$max_thumbnail_size: 800px;
+
+$thumbnail_hover_opacity: 0.23;
+$thumbnail_hover_actions_transition: 0.23s;
+$thumbnail_hover_button_font_size: 1.2rem;
+
+$detail_global_padding: 15px;
+$detail_text_margin_bottom: 10px;
+
+div.image_actions {
+  position: relative;
+  width: $image_action_ratio;
+
+  img.thumbnail {
+    display: block;
+    margin: auto;
+    width: $thumbnail_width;
+    max-width: $max_thumbnail_size;
+    height: auto;
+    transition: opacity $thumbnail_hover_actions_transition ease;
+  }
+
+  input.play {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    margin: auto;
+    display: none;
+    font-size: $thumbnail_hover_button_font_size;
+    @include border_button(6rem, 3rem);
+  }
+
+  &:hover {
+    input.play {
+      display: block;
+    }
+
+    img.thumbnail {
+      opacity: $thumbnail_hover_opacity;
+    }
+  }
+}
+
+div.details {
+  width: $detail_ratio;
+  padding: $detail_global_padding;
+
+  span {
+    display: block;
+
+    &.episode, &.title {
+      margin-bottom: $detail_text_margin_bottom;
+    }
+
+    &.episode {
+      font: caption;
+      color: $tertiary_color;
+    }
+  }
+}

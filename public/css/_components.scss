@@ -33,10 +33,15 @@ div.field {
 
 // Buttons
 
+@mixin button_default_hover_focus($width, $height) {
+  @include button($width, $height);
+  @include button_hover();
+  @include button_focus();
+}
+
 @mixin button($width, $height) {
   background: transparent;
-  border: 1px solid $secondary_color;
-  border-radius: $button_radius;
+  border: none;
   color: $secondary_color;
   padding: 10px;
   letter-spacing: 1px;
@@ -49,13 +54,49 @@ div.field {
 
 @mixin button_hover() {
   color: $secondary_color_hover;
-  border: 1px solid $secondary_color_hover;
 }
 
 @mixin button_focus() {
-  outline: none !important;
   box-shadow: 0 0 4px $secondary_color;
+}
+
+@mixin border_button_default_hover_focus($width, $height) {
+  @include border_button($width, $height);
+  @include border_button_hover();
+  @include border_button_focus();
+}
+
+@mixin border_button($width, $height) {
+  @include button($width, $height);
+  border: 1px solid $secondary_color;
+  border-radius: $button_radius;
+}
+
+@mixin border_button_hover() {
+  @include button_hover();
+  border: 1px solid $secondary_color_hover;
+}
+
+@mixin border_button_focus() {
+  @include button_focus();
   border-color: $secondary_color_hover;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+
+  span {
+    color: $text_color;
+  }
+}
+
+input[type=button] {
+  @include button(4rem, 2rem);
+}
+
+input[type=button]::hover {
+  @include button_hover();
 }
 
 button {
@@ -67,7 +108,7 @@ button:hover {
 }
 
 button:focus {
-  @include button_focus();
+  outline: none;
 }
 
 // Posters

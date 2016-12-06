@@ -44,6 +44,10 @@ class Controller extends Component {
   registerKeyEvents(keyListener) {
     const self = this;
 
+    keyListener.register('CommandOrControl+Shift+P', () => {
+      self.unregisterKeyEvents(globalShortcut);
+    });
+
     keyListener.register('Up', () => {
       self.handleOnUp();
     });
@@ -146,7 +150,7 @@ class Controller extends Component {
     const { name, host, port } = this.props.enkodi.connection;
 
     return (
-      <div className="controller_container">
+      <div className="controllers">
         <p>Connected to {name} at {host}:{port}</p>
 
         <div className="volume">
@@ -163,23 +167,39 @@ class Controller extends Component {
         <div className="control_buttons">
           <div className="input">
             <div className="row">
-              <button className="up" onClick={this.handleOnUp.bind(this)}>Up</button>
+              <button className="up" onClick={this.handleOnUp.bind(this)}>
+                <i className="fa fa-chevron-circle-up fa-5x" />
+              </button>
             </div>
             <div className="row">
-              <button className="left" onClick={this.handleOnLeft.bind(this)}>Left</button>
-              <button className="enter" onClick={this.handleOnEnter.bind(this)}>Enter</button>
-              <button className="right" onClick={this.handleOnRight.bind(this)}>Right</button>
+              <button className="left" onClick={this.handleOnLeft.bind(this)}>
+                <i className="fa fa-chevron-circle-left fa-5x" />
+              </button>
+              <button className="enter" onClick={this.handleOnEnter.bind(this)}>
+                <i className="fa fa-circle-o fa-5x" />
+              </button>
+              <button className="right" onClick={this.handleOnRight.bind(this)}>
+                <i className="fa fa-chevron-circle-right fa-5x" />
+              </button>
             </div>
             <div className="row">
-              <button className="down" onClick={this.handleOnDown.bind(this)}>Down</button>
+              <button className="down" onClick={this.handleOnDown.bind(this)}>
+                <i className="fa fa-chevron-circle-down fa-5x" />
+              </button>
             </div>
           </div>
 
           <div className="actions">
             <div className="row">
-              <button className="back" onClick={this.handleOnBack.bind(this)} />
-              <button className="home" onClick={this.handleOnHome.bind(this)} />
-              <button className="menu" onClick={this.handleOnMenu.bind(this)} />
+              <button className="back" onClick={this.handleOnBack.bind(this)}>
+                <i className="fa fa-arrow-left fa-5x" />
+              </button>
+              <button className="home" onClick={this.handleOnHome.bind(this)}>
+                <i className="fa fa-home fa-5x" />
+              </button>
+              <button className="menu" onClick={this.handleOnMenu.bind(this)}>
+                <i className="fa fa-bars fa-5x" />
+              </button>
             </div>
           </div>
         </div>

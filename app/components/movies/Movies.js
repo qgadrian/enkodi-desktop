@@ -3,7 +3,6 @@ import Movie from './Movie';
 
 export default class Movies extends Component {
   static propTypes = {
-    // onPlayerPause: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
       kodiHandler: PropTypes.object.isRequired
     }).isRequired
@@ -12,27 +11,39 @@ export default class Movies extends Component {
   constructor(props) {
     super(props);
 
+    const onScanFinished =
+      this.props.enkodi.kodiHandler.connection.VideoLibrary.OnScanFinished(this.refreshMovies);
+
     this.state = {
       loading: true,
+      onScanFinished,
       movies: []
     };
   }
 
   componentDidMount() {
-    const self = this;
+    this.refreshMovies();
+  }
 
+  componentWillUnmount() {
+    this.state.onScanFinished.removeListener('VideoLibrary.OnScanFinished', this.refreshMovies);
+  }
+
+  refreshMovies = () => {
+    const self = this;
     const filter = { properties: ['title', 'rating', 'year', 'runtime', 'thumbnail'] };
+
     this.props.enkodi.kodiHandler.connection.VideoLibrary.GetMovies(filter)
       .then((data) => {
         const movies = data.movies.map((movie) => (
           <Movie
             key={movie.movieid}
+            movieId={movie.movieid}
             title={movie.title}
             thumbnail={movie.thumbnail}
           />
         ));
 
-        console.log(movies);
         self.setState({ movies });
         self.setState({ loading: false });
         return true;

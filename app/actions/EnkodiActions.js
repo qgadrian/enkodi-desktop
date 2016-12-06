@@ -55,10 +55,62 @@ export function playerStatusChange(isPlaying) {
   };
 }
 
+export const ON_PLAYER_STOP = 'ON_PLAYER_STOP';
+export function playerStop() {
+  return {
+    type: ON_PLAYER_STOP
+  };
+}
+
+export const ON_PLAYER_PLAY_DETAILS = 'ON_PLAYER_PLAY_DETAILS';
+export function playerPlayDetails(percentage, currentTime, totalTime) {
+  return {
+    type: ON_PLAYER_PLAY_DETAILS,
+    percentage,
+    currentTime: {
+      hours: currentTime.hours,
+      minutes: currentTime.minutes,
+      seconds: currentTime.seconds,
+      millis: currentTime.milliseconds
+    },
+    totalTime: {
+      hours: totalTime.hours,
+      minutes: totalTime.minutes,
+      seconds: totalTime.seconds,
+      millis: totalTime.milliseconds
+    }
+  };
+}
+
+export const ON_PLAYER_REFRESH_PLAY_TIME = 'ON_PLAYER_REFRESH_PLAY_TIME';
+export function playerRefreshPlayTime(currentTime) {
+  return {
+    type: ON_PLAYER_REFRESH_PLAY_TIME,
+    currentTime: {
+      hours: currentTime.hours,
+      minutes: currentTime.minutes,
+      seconds: currentTime.seconds,
+      millis: currentTime.millis
+    }
+  };
+}
+
 export const ON_VOLUME_CHANGE = 'ON_VOLUME_CHANGE';
 export function volumeChange(volumeValue) {
   return {
     type: ON_VOLUME_CHANGE,
     volumeValue
+  };
+}
+
+export const ON_PLAYING_TVSHOW_EPISODE = 'ON_PLAYING_TVSHOW_EPISODE';
+export function playingTvshowEpisode(showTitle, seasonNumber, episodeName, episodeNumber) {
+  return {
+    type: ON_PLAYING_TVSHOW_EPISODE,
+    videoType: 'episode',
+    showTitle,
+    seasonNumber,
+    episodeName,
+    episodeNumber
   };
 }

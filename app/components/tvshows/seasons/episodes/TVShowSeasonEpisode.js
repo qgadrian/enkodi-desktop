@@ -33,9 +33,11 @@ export default class TVShowSeasonEpisode extends Component {
             onClick={this.handlePlayEpisode.bind(this, this.props.file)}
           />
         </div>
-        <span className="episode">{episodeTitle}</span>
-        <span className="title">{this.props.title}</span>
-        <span className="plot">{this.props.plot}</span>
+        <div className="details">
+          <span className="title">{this.props.title}</span>
+          <span className="episode">{episodeTitle}</span>
+          <span className="plot">{this.props.plot}</span>
+        </div>
       </div>
     );
   }

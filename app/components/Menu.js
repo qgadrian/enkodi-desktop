@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 
 class Menu extends Component {
 
   render() {
     return (
       <div className="main_menu">
-        <Link className="controller" to={'/controller'}>
+        <button className="back" onClick={browserHistory.goBack}>
+          <i className="fa fa-arrow-left fa-3x" />
+        </button>
+        <Link className="view controller" to={'/controller'}>
           <span>Controller</span>
         </Link>
-        <Link className="player" to={'/player'}>
+        <Link className="view player" to={'/player'}>
           <span>Player</span>
         </Link>
-        <Link className="tv_shows" to={'/tvshows'}>
+        <Link className="view tv_shows" to={'/tvshows'}>
           <span>Tv shows</span>
         </Link>
-        <Link className="movies" to={'/movies'}>
+        <Link className="view movies" to={'/movies'}>
           <span>Movies</span>
         </Link>
-        <Link className="music disabled">
+        <Link className="view music disabled">
           <span>Music</span>
         </Link>
       </div>

@@ -6,15 +6,14 @@ $tertiary_color: #BDBDBD;
 $text_color: #FAFAFA;
 $disabled_text: #9E9E9E;
 
-$font: normal 1rem Helvetica, Roboto, Calibri, Arial, sans-serif;;
+$font: normal 1rem Helvetica, Roboto, Calibri, Arial, sans-serif;
 
-$button_radius: 5px;
-
-$poster_width: 150px;
-$poster_height: 200px;
-
-@import "./components.scss";
-@import "./_volume_bar.scss";
+@import './fontawesome/font-awesome';
+@import "_measures";
+@import "_components";
+@import "_volume_bar";
+@import "_seek_bar";
+@import "_posters_list";
 
 body {
   background-color: $background_color;
@@ -22,46 +21,37 @@ body {
   font: $font;
 }
 
-a {
-  text-decoration: none;
-  cursor: pointer;
-  span {
-    color: $text_color;
-  }
-}
-
-input[type=button] {
-  @include button(4rem, 2rem);
-}
-
-input[type=button]::hover {
-  @include button_hover();
-}
-
 // Menu
 
 div.main_menu {
   text-align: right;
-  margin-bottom: 50px;
+  margin-bottom: $menu_margin_bottom;
 
-  a {
+  a.view, button.back {
     text-decoration: none;
-    margin-right: 10px;
+    margin-right: $menu_element_margin_right;
+    width: $back_key_width;
 
-    & > span {
-      padding: 25px;
+    &:hover, &:focus {
+      outline: none;
+    }
+
+    span {
+      display: inline-block;
+      text-align: center;
+      padding: $menu_element_padding;
+      width: $menu_element_width;
       color: $text_color;
-      position: relative;
+    }
+
+    span:hover {
+      border-bottom: $menu_element_hover_bottom_line_height solid $secondary_color;
     }
 
     &.disabled > span {
       color: $disabled_text;
       cursor: default;
     }
-  }
-
-  a:hover {
-    border-bottom: 1px solid $secondary_color;
   }
 }
 
@@ -94,53 +84,50 @@ div.container {
   }
 }
 
-// Controller
-
-div.control_buttons {
-  div.input, div.actions {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 10px;
-
-    &>div.row {
-      margin-bottom: 10px;
+// Player
+div.player {
+  div.seek_bar {
+    div.timer > span {
+      display: block;
+      text-align: right;
     }
   }
+}
 
-  & div.row > button {
-    background-repeat: no-repeat;
-    background-position: center;;
-    background-size: 20%;
-    vertical-align: middle;
+// Controller
+div.controllers {
+  p {
+    color: $disabled_text;
+    font: small-caption;
+    text-align: center;
+  }
 
-    &.menu {
-      background-image: url('../img/buttons/menu.png');
+  div.control_buttons {
+    width: 100%;
+    position: absolute;
+    margin-top: $control_buttons_margin_top;
+
+    div.input, div.actions {
+      width: 100%;
+      text-align: center;
+      margin-bottom: $control_elements_margin_bottom;
+
+      &>div.row {
+        margin-bottom: $control_elements_margin_bottom;
+      }
     }
-    &.back {
-      background-image: url('../img/buttons/back.png');
-    }
-    &.home {
-      background-image: url('../img/buttons/home.png');
+
+    & div.row > button {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 20%;
+      vertical-align: middle;
     }
   }
 }
 
 // Movies
-div.movies {
-  div.movie {
-    text-align: center;
-    margin-bottom: 20px;
-
-    span.title {
-      display: block;
-      margin-top: 10px;
-    }
-
-    img.thumbnail {
-      @include thumbnail_poster();
-    }
-  }
-}
+@include posters_list('movies', 'movie', 'movie');
 
 // Tv shows
 div.tvshows {
@@ -163,70 +150,13 @@ div.tvshows {
   }
 }
 
-div.seasons {
-  display: flex;
-  flex-flow: row wrap;
-
-  div.season {
-    width: 25%;
-    text-align: center;
-    margin-bottom: 20px;
-
-    a.episodes {
-      text-decoration: none;
-
-      img.thumbnail {
-        @include thumbnail_poster();
-      }
-
-      span.title {
-        margin-top: 10px;
-        display: block;
-        text-align: center;
-      }
-    }
-  }
-}
+@include posters_list('seasons', 'season', 'episodes');
 
 div.episodes {
   div.episode {
     margin-bottom: 10px;
+    display: flex;
 
-    div.image_actions {
-      position: relative;
-
-      img.thumbnail {
-        display: block;
-        margin: auto;
-        width: 100%;
-        max-width: 800px;
-        height: auto;
-        transition: opacity 0.23s ease;
-      }
-
-      input.play {
-        position: absolute;
-        top: 50%;
-        right: 50%;
-        margin: auto;
-        display: none;
-        font-size: 1.2rem;
-        @include button(6rem, 3rem);
-      }
-
-      &:hover {
-        input.play {
-          display: block;
-        }
-
-        img.thumbnail {
-          opacity: 0.23;
-        }
-      }
-    }
-
-    span {
-      display: block;
-    }
+    @import '_video_info';
   }
 }

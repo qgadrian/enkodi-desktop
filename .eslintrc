@@ -13,6 +13,7 @@
     "generator-star-spacing": "off",
     "import/no-unresolved": ["error", { "ignore": ["electron"] }],
     "import/no-extraneous-dependencies": "off",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-use-before-define": "off",
     "promise/param-names": 2,
     "promise/always-return": 2,

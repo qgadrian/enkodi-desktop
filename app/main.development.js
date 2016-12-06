@@ -20,6 +20,9 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
 
 const installExtensions = async () => {
   if (process.env.NODE_ENV === 'development') {
@@ -46,11 +49,6 @@ app.on('ready', async () => {
     width: 1024,
     height: 728
   });
-
-  global.sharedObject = {
-    keyListener: globalShortcut,
-    browserWindow: mainWindow
-  };
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
