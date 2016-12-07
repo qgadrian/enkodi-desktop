@@ -168,23 +168,23 @@ class Controller extends Component {
           <div className="input">
             <div className="row">
               <button className="up" onClick={this.handleOnUp.bind(this)}>
-                <i className="fa fa-chevron-circle-up fa-5x" />
+                <i className="control_up" />
               </button>
             </div>
             <div className="row">
               <button className="left" onClick={this.handleOnLeft.bind(this)}>
-                <i className="fa fa-chevron-circle-left fa-5x" />
+                <i className="control_left" />
               </button>
               <button className="enter" onClick={this.handleOnEnter.bind(this)}>
-                <i className="fa fa-circle-o fa-5x" />
+                <i className="control_ok" />
               </button>
               <button className="right" onClick={this.handleOnRight.bind(this)}>
-                <i className="fa fa-chevron-circle-right fa-5x" />
+                <i className="control_right" />
               </button>
             </div>
             <div className="row">
               <button className="down" onClick={this.handleOnDown.bind(this)}>
-                <i className="fa fa-chevron-circle-down fa-5x" />
+                <i className="control_down" />
               </button>
             </div>
           </div>
@@ -192,13 +192,13 @@ class Controller extends Component {
           <div className="actions">
             <div className="row">
               <button className="back" onClick={this.handleOnBack.bind(this)}>
-                <i className="fa fa-arrow-left fa-5x" />
+                <i className="action_left" />
               </button>
               <button className="home" onClick={this.handleOnHome.bind(this)}>
-                <i className="fa fa-home fa-5x" />
+                <i className="action_home" />
               </button>
               <button className="menu" onClick={this.handleOnMenu.bind(this)}>
-                <i className="fa fa-bars fa-5x" />
+                <i className="action_menu" />
               </button>
             </div>
           </div>

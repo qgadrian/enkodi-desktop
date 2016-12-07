@@ -7,7 +7,7 @@ class Menu extends Component {
     return (
       <div className="main_menu">
         <button className="back" onClick={browserHistory.goBack}>
-          <i className="fa fa-arrow-left fa-3x" />
+          <i className="menu_back" />
         </button>
         <Link className="view controller" to={'/controller'}>
           <span>Controller</span>

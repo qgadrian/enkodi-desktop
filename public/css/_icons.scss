@@ -1,0 +1,88 @@
+@import '../../node_modules/font-awesome/scss/font-awesome';
+
+.common_icon_properties {
+  @extend .fa;
+}
+
+.common_icon_3x {
+  @extend .common_icon_properties;
+  @extend .fa-3x;
+}
+
+.common_icon_5x {
+  @extend .common_icon_properties;
+  @extend .fa-5x;
+}
+
+// Menu
+
+i.menu_back {
+  @extend .common_icon_3x;
+  @extend .fa-arrow-left;
+}
+
+// Controller
+
+i.control_up {
+  @extend .common_icon_5x;
+  @extend .fa-chevron-circle-up;
+}
+
+i.control_down {
+  @extend .common_icon_5x;
+  @extend .fa-chevron-circle-down;
+}
+
+i.control_right {
+  @extend .common_icon_5x;
+  @extend .fa-chevron-circle-right;
+}
+
+i.control_left {
+  @extend .common_icon_5x;
+  @extend .fa-chevron-circle-left;
+}
+
+i.control_ok {
+  @extend .common_icon_5x;
+  @extend .fa-circle-o;
+}
+
+i.action_left {
+  @extend .common_icon_5x;
+  @extend .fa-arrow-left;
+}
+
+// Actions
+
+i.action_right {
+  @extend .common_icon_5x;
+  @extend .fa-arrow-right;
+}
+
+i.action_home {
+  @extend .common_icon_5x;
+  @extend .fa-home;
+}
+
+i.action_menu {
+  @extend .common_icon_5x;
+  @extend .fa-bars;
+}
+
+// Player
+
+i.player_play {
+  @extend .common_icon_5x;
+  @extend .fa-play-circle-o;
+}
+
+i.player_pause {
+  @extend .common_icon_5x;
+  @extend .fa-pause-circle-o;
+}
+
+i.player_stop {
+  @extend .common_icon_5x;
+  @extend .fa-stop-circle-o;
+}

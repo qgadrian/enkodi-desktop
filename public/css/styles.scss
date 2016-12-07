@@ -8,9 +8,9 @@ $disabled_text: #9E9E9E;
 
 $font: normal 1rem Helvetica, Roboto, Calibri, Arial, sans-serif;
 
-@import './fontawesome/font-awesome';
 @import "_measures";
 @import "_components";
+@import "_icons";
 @import "_volume_bar";
 @import "_seek_bar";
 @import "_posters_list";

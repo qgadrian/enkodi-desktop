@@ -150,7 +150,7 @@ class Player extends Component {
   }
 
   render() {
-    const buttonStyle = this.props.enkodi.player.playing ? 'fa fa-pause-circle-o fa-3x' : 'fa fa-play-circle-o fa-3x';
+    const buttonStyle = this.props.enkodi.player.playing ? 'player_pause' : 'player_play';
 
     return (
       <div className="player">
@@ -172,7 +172,7 @@ class Player extends Component {
             <i className={buttonStyle} />
           </button>
           <button className="stop" onClick={this.handleOnStop.bind(this)}>
-            <i className="fa fa-stop-circle-o fa-3x" />
+            <i className="player_stop" />
           </button>
         </div>
       </div>
