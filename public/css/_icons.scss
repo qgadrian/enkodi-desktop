@@ -73,16 +73,26 @@ i.action_menu {
 // Player
 
 i.player_play {
-  @extend .common_icon_5x;
-  @extend .fa-play-circle-o;
+  @extend .common_icon_3x;
+  @extend .fa-play;
 }
 
 i.player_pause {
-  @extend .common_icon_5x;
-  @extend .fa-pause-circle-o;
+  @extend .common_icon_3x;
+  @extend .fa-pause;
 }
 
 i.player_stop {
-  @extend .common_icon_5x;
-  @extend .fa-stop-circle-o;
+  @extend .common_icon_3x;
+  @extend .fa-stop;
+}
+
+i.player_subtitles {
+  @extend .common_icon_3x;
+  @extend .fa-cc;
+}
+
+i.player_audio {
+  @extend .common_icon_3x;
+  @extend .fa-headphones;
 }

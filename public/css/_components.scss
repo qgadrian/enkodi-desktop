@@ -118,3 +118,12 @@ button:focus {
   height: $poster_height;
   width: $poster_width;
 }
+
+// label
+@mixin info_label($font_size) {
+  font-size: $font_size;
+  color: $tertiary_text_color;
+  border: $label_border_size solid $tertiary_color;
+  border-radius: $label_border_radius;
+  padding: $label_border_padding;
+}
