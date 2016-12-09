@@ -1,52 +1,46 @@
-export const CONNECT_AND_SAVE = 'CONNECT_AND_SAVE';
-export function connect(name, host, port) {
+const playerParams = { playerid: 1 }; // TODO replicated const
+
+// Properties
+export const GET_PLAYER_PROPERTIES = 'GET_PLAYER_PROPERTIES';
+const playerPropertiesFilter = {
+  playerid: 1,
+  properties: ['percentage', 'time', 'totaltime', 'audiostreams', 'subtitles']
+};
+export function getPlayerProperties() {
   return {
-    type: CONNECT_AND_SAVE,
-    connection: {
-      name,
-      host,
-      port
+    type: GET_PLAYER_PROPERTIES,
+    filter: playerPropertiesFilter
+  };
+}
+
+export const GET_EPISODE_DETAILS = 'GET_EPISODE_DETAILS';
+export function getEpisodeDetails(episodeId) {
+  return {
+    type: GET_EPISODE_DETAILS,
+    filter: {
+      episodeid: episodeId,
+      properties: ['showtitle', 'title', 'season', 'episode']
     }
   };
 }
 
-export const UPDATE_CONNECTION_NAME = 'UPDATE_CONNECTION_NAME';
-export function connectionName(name) {
-  return {
-    type: UPDATE_CONNECTION_NAME,
-    name
-  };
+// Inputs
+export const PLAYER_PLAY_PAUSE = 'PLAYER_PLAY_PAUSE';
+export function playerPlayPauseAction() {
+  return { type: PLAYER_PLAY_PAUSE, params: playerParams };
 }
 
-export const UPDATE_CONNECTION_HOST = 'UPDATE_CONNECTION_HOST';
-export function connectionHost(host) {
-  return {
-    type: UPDATE_CONNECTION_HOST,
-    host
-  };
+export const PLAYER_STOP = 'PLAYER_STOP';
+export function playerStopAction() {
+  return { type: PLAYER_STOP, params: playerParams };
 }
 
-export const UPDATE_CONNECTION_PORT = 'UPDATE_CONNECTION_PORT';
-export function connectionPort(port) {
-  return {
-    type: UPDATE_CONNECTION_PORT,
-    port
-  };
+export const PLAYER_OPEN_FILE = 'PLAYER_OPEN_FILE';
+export function playerOpenFile(file) {
+  return { type: PLAYER_OPEN_FILE, params: { item: { file } } };
 }
 
-export const SAVE_AND_CONNECT = 'SAVE_AND_CONNECT';
-export function saveAndConnect(name, host, port, kodiHandler) {
-  return {
-    type: SAVE_AND_CONNECT,
-    connection: {
-      name,
-      host,
-      port,
-      kodiHandler
-    }
-  };
-}
-
+// Events
 export const ON_PLAYER_STATUS_CHANGE = 'ON_PLAYER_STATUS_CHANGE';
 export function playerStatusChange(isPlaying) {
   return {
@@ -92,14 +86,6 @@ export function playerRefreshPlayTime(currentTime) {
       seconds: currentTime.seconds,
       millis: currentTime.millis
     }
-  };
-}
-
-export const ON_VOLUME_CHANGE = 'ON_VOLUME_CHANGE';
-export function volumeChange(volumeValue) {
-  return {
-    type: ON_VOLUME_CHANGE,
-    volumeValue
   };
 }
 

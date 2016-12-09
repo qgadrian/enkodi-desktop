@@ -1,97 +1,87 @@
 // @flow
-// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Home from '../components/Home';
-import { connectionName, connectionHost, connectionPort, saveAndConnect, playerStatusChange,
-  playerStop, volumeChange, playingTvshowEpisode, playerPlayDetails } from '../actions/EnkodiActions';
-import KodiHandler from '../utils/kodi/KodiHandler';
+import { volumeChange } from '../actions/kodi/VolumeActions';
+import { kodiConnect, connectionName, connectionHost, connectionPort } from '../actions/kodi/ConnectionActions';
+import { createConnection, handleDispatchEvent } from '../utils/kodi/KodiHandler';
+
+const PlayerActions = require('../actions/kodi/PlayerActions');
 
 function matchDispatchToProps(dispatch) {
   return {
     onNameChange: (name) => {
       dispatch(connectionName(name));
     },
+
     onHostChange: (host) => {
       dispatch(connectionHost(host));
     },
+
     onPortChange: (port) => {
       dispatch(connectionPort(port));
     },
+
     onSaveAndConnect: (name, host, port) => {
-      const kodiHandler = new KodiHandler(host, port, (connection) => {
-        connection.Player.OnPlay((data) => {
-          const playerFilter = { playerid: 1, properties: ['percentage', 'time', 'totaltime', 'audiostreams', 'subtitles'] };
-          connection.Player.GetProperties(playerFilter).then((playDetails) =>
-            dispatch(playerPlayDetails(playDetails.percentage, playDetails.time, playDetails.totaltime))
-          ).catch((error) => console.error(error));
+      createConnection(host, port, (kodiClient) => {
+        dispatch(kodiConnect(name, host, port, kodiClient));
 
-          switch (data.data.item.type) {
-            case 'episode': {
-              const episodeid = data.data.item.id;
-              const filter = { episodeid, properties: ['showtitle', 'title', 'season', 'episode'] };
-              connection.VideoLibrary.GetEpisodeDetails(filter).then((episodeData) => {
-                const details = episodeData.episodedetails;
-                return dispatch(playingTvshowEpisode(details.showtitle, details.season, details.title, details.episode));
-              }).catch((error) => console.error(error));
-              break;
-            }
-            default:
-              break;
-          }
+        kodiClient.Player.OnPlay((data) =>
+          refreshPlayingInformation(kodiClient, dispatch, data.data.item.type, data.data.item.id));
 
-          dispatch(playerStatusChange(true));
-        });
+        kodiClient.Player.GetItem({ playerid: 1 })
+          .then((data) => refreshPlayingInformation(kodiClient, dispatch, data.item.type, data.item.id))
+          .catch((error) => console.error(error));
 
-        connection.Player.GetItem({ playerid: 1 }).then((data) => {
-          refreshPlayerProperties(dispatch, connection, data.item.type, data.item.id);
-        }).catch((error) => console.error(error));
-
-        connection.Player.OnPause(() =>
-          dispatch(playerStatusChange(false))
+        kodiClient.Player.OnPause(() =>
+          dispatch(PlayerActions.playerStatusChange(false))
         );
 
-        connection.Player.OnStop(() =>
-          dispatch(playerStop())
+        kodiClient.Player.OnStop(() =>
+          dispatch(PlayerActions.playerStop())
         );
 
-        connection.Application.OnVolumeChanged((data) =>
+        kodiClient.Application.OnVolumeChanged((data) =>
           dispatch(volumeChange(data.data.volume))
         );
       });
-
-      dispatch(saveAndConnect(name, host, port, kodiHandler));
     }
   };
-}
-
-function refreshPlayerProperties(dispatch, connection, type, itemId) {
-  const playerFilter = { playerid: 1, properties: ['percentage', 'time', 'totaltime', 'audiostreams', 'subtitles', 'speed'] };
-  connection.Player.GetProperties(playerFilter).then((playDetails) => {
-    if (playDetails.speed > 0) {
-      console.log(playDetails);
-      dispatch(playerPlayDetails(playDetails.percentage, playDetails.time, playDetails.totaltime));
-    }
-    return true;
-  }).catch((error) => console.error(error));
-
-  switch (type) {
-    case 'episode': {
-      const filter = { episodeid: itemId, properties: ['showtitle', 'title', 'season', 'episode'] };
-      connection.VideoLibrary.GetEpisodeDetails(filter).then((episodeData) => {
-        const details = episodeData.episodedetails;
-        return dispatch(playingTvshowEpisode(details.showtitle, details.season, details.title, details.episode));
-      }).catch((error) => console.error(error));
-      break;
-    }
-    default:
-      break;
-  }
 }
 
 function mapStateToProps(state) {
   return {
     enkodi: state.enkodi
   };
+}
+
+function refreshPlayingInformation(kodiClient, dispatch, type, itemId) {
+  const somethingPlaying = itemId !== undefined;
+  if (somethingPlaying) {
+    refreshPlayerProperties(kodiClient, dispatch);
+    refreshPlayingInformationByVideoType(kodiClient, dispatch, type, itemId);
+    dispatch(PlayerActions.playerStatusChange(true));
+  }
+}
+
+function refreshPlayerProperties(kodiClient, dispatch) {
+  handleDispatchEvent(kodiClient, dispatch, PlayerActions.getPlayerProperties());
+}
+
+function refreshPlayingInformationByVideoType(kodiClient, dispatch, type, itemId) {
+  switch (type) {
+    case 'episode': {
+      // const filter = { episodeid: itemId, properties: ['showtitle', 'title', 'season', 'episode'] };
+      // kodiClient.VideoLibrary.GetEpisodeDetails(filter).then((episodeData) => {
+      //   const { showtitle, season, title, episode } = episodeData.episodedetails;
+      //   return dispatch(PlayerActions.playingTvshowEpisode(showtitle, season, title, episode));
+      // }).catch((error) => console.error(`Using type [${type}] and id [${itemId}] thrown: ${error}`));
+      handleDispatchEvent(kodiClient, dispatch, PlayerActions.getEpisodeDetails(itemId));
+      break;
+    }
+    default:
+      console.warn(`Unrecognized video type: ${type}`);
+      break;
+  }
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(Home);

@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import SeekBar from 'rc-slider';
 import parseNumberAsTwoDigits from '../utils/Number';
+import { handleSendEvent } from '../utils/kodi/KodiHandler';
 
-const kodiApiActions = require('../actions/KodiApiActions');
+const PlayerActions = require('../actions/kodi/PlayerActions');
 const moment = require('moment');
 
 class Player extends Component {
@@ -11,7 +12,9 @@ class Player extends Component {
     onRefreshPlayerTime: PropTypes.func.isRequired,
     onRefreshPlayerDetails: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
-      kodiHandler: PropTypes.object.isRequired,
+      connection: PropTypes.shape({
+        client: PropTypes.object.isRequired,
+      }).isRequired,
       player: PropTypes.shape({
         playing: PropTypes.bool.isRequired,
         type: PropTypes.string,
@@ -71,7 +74,7 @@ class Player extends Component {
 // TODO clear this wrongly used listeners
   componentDidMount() {
     if (this.props.enkodi.player.playing) {
-      this.props.onRefreshPlayerTime(this.props.enkodi.kodiHandler.connection);
+      this.props.onRefreshPlayerTime(this.props.enkodi.connection.client);
       this.refreshCurrentPlayTime();
     }
   }
@@ -85,31 +88,36 @@ class Player extends Component {
     const timeString = '';
     const { hasPlayTimeInfo, currentTime: { hours, minutes, seconds }, totalTime } = this.props.enkodi.player;
 
-    if (hasPlayTimeInfo && totalTime.hours > 0) {
-      timeString.concat(parseNumberAsTwoDigits(hours)).concat(':');
+    if (hasPlayTimeInfo) {
+      if (totalTime.hours > 0) {
+        timeString.concat(parseNumberAsTwoDigits(hours)).concat(':');
+      }
+
+      return timeString.concat(parseNumberAsTwoDigits(minutes)).concat(':').concat(parseNumberAsTwoDigits(seconds));
     }
 
-    return timeString.concat(parseNumberAsTwoDigits(minutes)).concat(':').concat(parseNumberAsTwoDigits(seconds));
+    return '';
   }
 
   getVideoTypePlayDetail() {
     if (this.props.enkodi.player.playing) {
       switch (this.props.enkodi.player.type) {
-        case 'episode':
+        case 'episode': {
+          const { seasonNumber, episodeNumber } = this.props.enkodi.player.tvshow;
           return (
             <div className="detail">
               <div className="title">
                 <span className="title">{this.props.enkodi.player.tvshow.showTitle}</span>
               </div>
-              <div className="season">
-                <span className="season">Season {this.props.enkodi.player.tvshow.seasonNumber}</span>
-              </div>
               <div className="episode">
-                <span className="number">Episode {this.props.enkodi.player.tvshow.episodeNumber}</span>
                 <span className="name">{this.props.enkodi.player.tvshow.episodeName}</span>
+              </div>
+              <div className="season">
+                <span className="season">{`Season ${seasonNumber}, episode ${episodeNumber}`}</span>
               </div>
             </div>
           );
+        }
         default: break;
       }
     }
@@ -132,7 +140,7 @@ class Player extends Component {
 
       const percentageBarUpdateTimer = setInterval(() => {
         if (this.props.enkodi.player.playing) {
-          this.props.onRefreshPlayerTime(this.props.enkodi.kodiHandler.connection);
+          this.props.onRefreshPlayerTime(this.props.enkodi.connection.client);
         }
       }, 5000);
 
@@ -141,12 +149,22 @@ class Player extends Component {
   }
 
   handleOnPlayPause() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.playerPlayPauseAction());
-    this.props.onPlayerSatusChange(!this.props.enkodi.player.playing);
+    if (this.props.enkodi.player.playing) {
+      handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerPlayPauseAction());
+      this.props.onPlayerSatusChange(!this.props.enkodi.player.playing);
+    }
   }
 
   handleOnStop() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.playerStopAction());
+    handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerStopAction());
+  }
+
+  handleOnSubtitles() {
+    console.log('subtitles');
+  }
+
+  handleOnAudioChannel() {
+    console.log('audio');
   }
 
   render() {
@@ -154,8 +172,6 @@ class Player extends Component {
 
     return (
       <div className="player">
-        {this.getVideoTypePlayDetail()}
-
         <div className="seek_bar">
           <div className="timer">
             <span>{this.getCurrentPlayTimeString()}</span>
@@ -174,7 +190,15 @@ class Player extends Component {
           <button className="stop" onClick={this.handleOnStop.bind(this)}>
             <i className="player_stop" />
           </button>
+          <button className="subtitles" onClick={this.handleOnSubtitles.bind(this)}>
+            <i className="player_subtitles" />
+          </button>
+          <button className="audio" onClick={this.handleOnAudioChannel.bind(this)}>
+            <i className="player_audio" />
+          </button>
         </div>
+
+        {this.getVideoTypePlayDetail()}
       </div>
     );
   }

@@ -10,9 +10,11 @@ class Home extends Component {
     onSaveAndConnect: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
       connection: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        host: PropTypes.string.isRequired,
-        port: PropTypes.string.isRequired
+        info: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          host: PropTypes.string.isRequired,
+          port: PropTypes.string.isRequired
+        }).isRequired
       }).isRequired
     }).isRequired
   };
@@ -20,10 +22,12 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
+    const { name, host, port } = this.props.enkodi.connection.info;
+
     this.state = {
-      name: this.props.enkodi.connection.name,
-      host: this.props.enkodi.connection.host,
-      port: this.props.enkodi.connection.port
+      name,
+      host,
+      port
     };
   }
 

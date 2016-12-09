@@ -4,6 +4,8 @@ $secondary_color_hover: #EF9A9A;
 $tertiary_color: #BDBDBD;
 
 $text_color: #FAFAFA;
+$secondary_text_color: #E0E0E0;
+$tertiary_text_color: #BDBDBD;
 $disabled_text: #9E9E9E;
 
 $font: normal 1rem Helvetica, Roboto, Calibri, Arial, sans-serif;
@@ -86,16 +88,46 @@ div.container {
 
 // Player
 div.player {
+  div {
+    margin-bottom: $player_container_common_margin_bottom;
+  }
+
   div.seek_bar {
     div.timer > span {
       display: block;
       text-align: right;
     }
   }
+
+  div.actions {
+    text-align: center;
+  }
+
+  div.detail {
+    line-height: $player_detail_line_height;
+
+    div.title > span.title {
+      font-size: -webkit-xxx-large;
+    }
+
+    div.episode {
+      color: $secondary_text_color;
+    }
+
+    div.season {
+      border-bottom: 1px solid $tertiary_color;
+      padding-bottom: 10px;
+
+      span.season {
+        @include info_label(small);
+      }
+    }
+  }
 }
 
 // Controller
 div.controllers {
+  // TODO: this p will be removed eventually
   p {
     color: $disabled_text;
     font: small-caption;

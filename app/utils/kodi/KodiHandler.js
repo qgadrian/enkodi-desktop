@@ -1,99 +1,109 @@
-const KodiApiActions = require('../../actions/KodiApiActions');
+const InputActions = require('../../actions/kodi/InputActions');
+const LibraryActions = require('../../actions/kodi/LibraryActions');
+const VolumeActions = require('../../actions/kodi/VolumeActions');
+const PlayerActions = require('../../actions/kodi/PlayerActions');
 const kodiWs = require('kodi-ws');
 
-const KodiHandler = function KodiHandler(host, port, onConnectedCallback) {
-  const self = this;
-
+export function createConnection(host, port, callback) {
   console.log(`Connecting to Kodi in ${host}:${port}...`);
+  kodiWs(host, port)
+    .then((connection) => callback(connection))
+    .catch((error) => { console.error(error); });
+}
 
-  kodiWs(host, port).then(
-    (connection) => {
-      console.log('Enkodi succesfully connected to Kodi');
-      self.connection = connection;
-      onConnectedCallback(connection);
-    },
-    (err) => console.log(err)
-  ).catch((error) => console.error(error));
-};
-
-KodiHandler.prototype.handleSendEvent = function handleSendEvent(action) {
+export function handleDispatchEvent(kodiClient, dispatch, action) {
   switch (action.type) {
-    // Player
-    case KodiApiActions.PLAYER_PLAY_PAUSE:
-      return this.connection.Player.PlayPause(action.params).then(
-        (results) => console.log(results),
-        (err) => console.log(err)
-      );
-    case KodiApiActions.PLAYER_STOP:
-      return this.connection.Player.Stop(action.params).then(
-        (results) => console.log(results),
-        (err) => console.log(err)
-      );
+    case PlayerActions.GET_PLAYER_PROPERTIES: {
+      kodiClient.Player.GetProperties(action.filter).then((playDetails) =>
+        dispatch(PlayerActions.playerPlayDetails(playDetails.percentage, playDetails.time, playDetails.totaltime))
+      ).catch((error) => console.error(error));
+      break;
+    }
+    case PlayerActions.GET_EPISODE_DETAILS: {
+      kodiClient.VideoLibrary.GetEpisodeDetails(action.filter).then((episodeData) => {
+        const { showtitle, season, title, episode } = episodeData.episodedetails;
+        return dispatch(PlayerActions.playingTvshowEpisode(showtitle, season, title, episode));
+      }).catch((error) => console.error(`Using [${action.filter}] error was thrown: ${error}`));
+      break;
+    }
+    default: break;
+  }
+}
 
+export function handleSendEvent(connection, action) {
+  switch (action.type) {
     // Input
-    case KodiApiActions.INPUT_UP:
-      return this.connection.Input.Up().then(
+    case InputActions.INPUT_UP:
+      return connection.Input.Up().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_DOWN:
-      return this.connection.Input.Down().then(
+    case InputActions.INPUT_DOWN:
+      return connection.Input.Down().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_RIGHT:
-      return this.connection.Input.Right().then(
+    case InputActions.INPUT_RIGHT:
+      return connection.Input.Right().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_LEFT:
-      return this.connection.Input.Left().then(
+    case InputActions.INPUT_LEFT:
+      return connection.Input.Left().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_ENTER:
-      return this.connection.Input.Select().then(
+    case InputActions.INPUT_ENTER:
+      return connection.Input.Select().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_BACK:
-      return this.connection.Input.Back().then(
+    case InputActions.INPUT_BACK:
+      return connection.Input.Back().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_MENU:
-      return this.connection.Input.ContextMenu().then(
+    case InputActions.INPUT_MENU:
+      return connection.Input.ContextMenu().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_HOME:
-      return this.connection.Input.Home().then(
+    case InputActions.INPUT_HOME:
+      return connection.Input.Home().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
-    case KodiApiActions.INPUT_CONTEXT_MENU:
-      return this.connection.Input.ContextMenu().then(
+    case InputActions.INPUT_CONTEXT_MENU:
+      return connection.Input.ContextMenu().then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
       );
 
     // Player
-    case KodiApiActions.PLAYER_OPEN_FILE:
-      return this.connection.connection.Player.Open(action.params).then(
+    case PlayerActions.PLAYER_OPEN_FILE:
+      return connection.connection.Player.Open(action.params).then(
         (results) => console.log(results),
-        (err) => console.log(err)
+        (err) => console.error(err)
+      );
+    case PlayerActions.PLAYER_PLAY_PAUSE:
+      return connection.Player.PlayPause(action.params).then(
+        (results) => console.log(results),
+        (err) => console.error(err)
+      );
+    case PlayerActions.PLAYER_STOP:
+      return connection.Player.Stop(action.params).then(
+        (results) => console.log(results),
+        (err) => console.error(err)
       );
 
     // Library
-    case KodiApiActions.LIBRARY_GET_MOVIES:
-      return this.connection.VideoLibrary.GetMovies();
+    case LibraryActions.LIBRARY_GET_MOVIES:
+      return connection.VideoLibrary.GetMovies();
 
     // Application
-    case KodiApiActions.AUDIO_SET_VOLUME:
-      return this.connection.Application.SetVolume(action.params);
+    case VolumeActions.AUDIO_SET_VOLUME:
+      return connection.Application.SetVolume(action.params);
     default:
       return false;
   }
-};
-
-module.exports = KodiHandler;
+}

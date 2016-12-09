@@ -7,7 +7,9 @@ export default class TVShowSeasons extends Component {
       tvshowid: PropTypes.string.isRequired
     }).isRequired,
     enkodi: PropTypes.shape({
-      kodiHandler: PropTypes.object.isRequired
+      connection: PropTypes.shape({
+        client: PropTypes.object.isRequired
+      }).isRequired,
     }).isRequired
   };
 
@@ -28,7 +30,7 @@ export default class TVShowSeasons extends Component {
       properties: ['tvshowid', 'season', 'thumbnail']
     };
 
-    this.props.enkodi.kodiHandler.connection.VideoLibrary.GetSeasons(filter)
+    this.props.enkodi.connection.client.VideoLibrary.GetSeasons(filter)
       .then((data) => {
         const seasons = data.seasons.map((season) => (
           <TVShowSeason

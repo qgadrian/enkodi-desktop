@@ -5,7 +5,9 @@ export default class TVShows extends Component {
   static propTypes = {
     // onPlayerPause: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
-      kodiHandler: PropTypes.object.isRequired
+      connection: PropTypes.shape({
+        client: PropTypes.object.isRequired
+      }).isRequired,
     }).isRequired
   };
 
@@ -23,7 +25,7 @@ export default class TVShows extends Component {
 
     const filter = { properties: ['title', 'thumbnail'] };
 
-    this.props.enkodi.kodiHandler.connection.VideoLibrary.GetTVShows(filter)
+    this.props.enkodi.connection.client.VideoLibrary.GetTVShows(filter)
       .then((data) => {
         const tvshows = data.tvshows.map((tvshow) => (
           <TVShow

@@ -9,7 +9,9 @@ export default class TVShowSeasonEpisodes extends Component {
       season: PropTypes.string.isRequired
     }).isRequired,
     enkodi: PropTypes.shape({
-      kodiHandler: PropTypes.object.isRequired
+      connection: PropTypes.shape({
+        client: PropTypes.object.isRequired
+      }).isRequired,
     }).isRequired
   };
 
@@ -17,7 +19,7 @@ export default class TVShowSeasonEpisodes extends Component {
     super(props);
 
     const onScanFinished =
-      this.props.enkodi.kodiHandler.connection.VideoLibrary.OnScanFinished(this.refreshEpisodes);
+      this.props.enkodi.connection.client.VideoLibrary.OnScanFinished(this.refreshEpisodes);
 
     this.state = {
       loading: true,
@@ -37,7 +39,7 @@ export default class TVShowSeasonEpisodes extends Component {
   onPlayEpisode = (file) => {
     // TODO create api action
     const playParams = { item: { file } };
-    this.props.enkodi.kodiHandler.connection.Player.Open(playParams);
+    this.props.enkodi.connection.client.Player.Open(playParams);
     this.props.onPlayEpisode();
   }
 
@@ -50,7 +52,7 @@ export default class TVShowSeasonEpisodes extends Component {
       properties: ['title', 'plot', 'episode', 'showtitle', 'season', 'file', 'thumbnail']
     };
 
-    this.props.enkodi.kodiHandler.connection.VideoLibrary.GetEpisodes(filter)
+    this.props.enkodi.connection.client.VideoLibrary.GetEpisodes(filter)
       .then((data) => {
         const episodes = data.episodes.map((episode) => (
           <TVShowSeasonEpisode

@@ -1,7 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 import Controller from '../components/Controller';
-import { volumeChange } from '../actions/EnkodiActions';
+import { volumeChange } from '../actions/kodi/VolumeActions';
 
 function matchDispatchToProps(dispatch) {
   return {

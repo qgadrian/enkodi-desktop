@@ -4,7 +4,9 @@ import Movie from './Movie';
 export default class Movies extends Component {
   static propTypes = {
     enkodi: PropTypes.shape({
-      kodiHandler: PropTypes.object.isRequired
+      connection: PropTypes.shape({
+        client: PropTypes.object.isRequired
+      }).isRequired,
     }).isRequired
   };
 
@@ -12,7 +14,7 @@ export default class Movies extends Component {
     super(props);
 
     const onScanFinished =
-      this.props.enkodi.kodiHandler.connection.VideoLibrary.OnScanFinished(this.refreshMovies);
+      this.props.enkodi.connection.client.VideoLibrary.OnScanFinished(this.refreshMovies);
 
     this.state = {
       loading: true,
@@ -33,7 +35,7 @@ export default class Movies extends Component {
     const self = this;
     const filter = { properties: ['title', 'rating', 'year', 'runtime', 'thumbnail'] };
 
-    this.props.enkodi.kodiHandler.connection.VideoLibrary.GetMovies(filter)
+    this.props.enkodi.connection.client.VideoLibrary.GetMovies(filter)
       .then((data) => {
         const movies = data.movies.map((movie) => (
           <Movie

@@ -1,7 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 import TVShowSeasonEpisodes from '../../components/tvshows/seasons/episodes/TVShowSeasonEpisodes';
-import { playerStatusChange } from '../../actions/EnkodiActions';
+import { playerStatusChange } from '../../actions/kodi/PlayerActions';
 
 function matchDispatchToProps(dispatch) {
   return {

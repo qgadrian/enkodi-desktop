@@ -1,24 +1,28 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
 import VolumeSlider from 'rc-slider';
+import { handleSendEvent } from '../utils/kodi/KodiHandler';
 
-const kodiApiActions = require('../actions/KodiApiActions');
+const inputActions = require('../actions/kodi/InputActions');
+const volumeActions = require('../actions/kodi/VolumeActions');
 
 // TODO check leaks when gc deferrences this remote object
 const mainWindow = require('electron').remote.getCurrentWindow();
 const globalShortcut = require('electron').remote.globalShortcut;
 
 class Controller extends Component {
-
   static propTypes = {
     onVolumeChange: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
       connection: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        host: PropTypes.string.isRequired,
-        port: PropTypes.string.isRequired
+        info: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          host: PropTypes.string.isRequired,
+          port: PropTypes.string.isRequired
+        }).isRequired,
+        client: PropTypes.object,
+        connected: PropTypes.bool.isRequired,
       }).isRequired,
-      kodiHandler: PropTypes.object.isRequired,
       player: PropTypes.shape({
         volume: PropTypes.number.isRequired
       }).isRequired,
@@ -32,13 +36,22 @@ class Controller extends Component {
       this.registerKeyEvents(globalShortcut);
     }
 
-    mainWindow.on('focus', () => { console.log('on focus'); self.registerKeyEvents(globalShortcut); });
+    mainWindow.on('focus', () => self.registerKeyEvents(globalShortcut));
 
-    mainWindow.on('blur', () => { console.log('lost focus'); self.unregisterKeyEvents(globalShortcut); });
+    mainWindow.on('blur', () => self.unregisterKeyEvents(globalShortcut));
   }
 
-  componentDidUmount() {
+  componentWillUnmount() {
     this.unregisterKeyEvents(globalShortcut);
+  }
+
+  getConnectionStatusText() {
+    if (this.props.enkodi.connection.connected) {
+      const { name, host, port } = this.props.enkodi.connection.info;
+      return `Connected to ${name} at ${host}:${port}`;
+    }
+
+    return 'Connecting...';
   }
 
   registerKeyEvents(keyListener) {
@@ -98,47 +111,47 @@ class Controller extends Component {
   }
 
   handleOnUp() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputUpAction());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputUpAction());
   }
 
   handleOnDown() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputDownAction());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputDownAction());
   }
 
   handleOnRight() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputRightAction());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputRightAction());
   }
 
   handleOnLeft() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputLeftAction());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputLeftAction());
   }
 
   handleOnEnter() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputEnter());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputEnter());
   }
 
   handleOnMenu() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputMenu());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputMenu());
   }
 
   handleOnBack() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputBack());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputBack());
   }
 
   handleOnHome() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputHome());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputHome());
   }
 
   handleOnContextMenu() {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.inputContextMenu());
+    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputContextMenu());
   }
 
   handleScanLibrary() {
-    this.props.enkodi.kodiHandler.connection.VideoLibrary.Scan();
+    this.props.enkodi.connection.client.VideoLibrary.Scan();
   }
 
   handleVolumeChange(volumeValue) {
-    this.props.enkodi.kodiHandler.handleSendEvent(kodiApiActions.audioSetVolume(volumeValue));
+    handleSendEvent(this.props.enkodi.connection.client, volumeActions.audioSetVolume(volumeValue));
     this.props.onVolumeChange(volumeValue);
   }
 
@@ -147,11 +160,9 @@ class Controller extends Component {
   }
 
   render() {
-    const { name, host, port } = this.props.enkodi.connection;
-
     return (
       <div className="controllers">
-        <p>Connected to {name} at {host}:{port}</p>
+        <p>{this.getConnectionStatusText()}</p>
 
         <div className="volume">
           <span className="label">Volume</span>
