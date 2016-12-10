@@ -104,6 +104,8 @@ div.player {
   }
 
   div.detail {
+    padding: $detail_container_padding;
+
     div.poster {
       display: inline-block;
 
