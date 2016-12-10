@@ -49,7 +49,7 @@ export default class TVShowSeasonEpisodes extends Component {
     const filter = {
       tvshowid: Number(this.props.params.tvshowid),
       season: Number(this.props.params.season),
-      properties: ['title', 'plot', 'episode', 'showtitle', 'season', 'file', 'thumbnail']
+      properties: ['title', 'plot', 'episode', 'showtitle', 'season', 'file', 'thumbnail', 'playcount']
     };
 
     this.props.enkodi.connection.client.VideoLibrary.GetEpisodes(filter)
@@ -63,6 +63,7 @@ export default class TVShowSeasonEpisodes extends Component {
             episode={episode.episode}
             file={episode.file}
             thumbnail={episode.thumbnail}
+            playcount={episode.playcount}
             onPlayEpisode={this.onPlayEpisode.bind(this)}
           />
         ));

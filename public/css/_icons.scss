@@ -77,6 +77,11 @@ i.player_play {
   @extend .fa-play;
 }
 
+i.player_replay {
+  @extend .common_icon_3x;
+  @extend .fa-refresh;
+}
+
 i.player_pause {
   @extend .common_icon_3x;
   @extend .fa-pause;
@@ -95,4 +100,11 @@ i.player_subtitles {
 i.player_audio {
   @extend .common_icon_3x;
   @extend .fa-headphones;
+}
+
+// Video library
+i.watched {
+  @extend .common_icon_3x;
+  @extend .fa-check;
+  color: #00C853;
 }

@@ -8,13 +8,13 @@ $max_thumbnail_size: 800px;
 
 $thumbnail_hover_opacity: 0.23;
 $thumbnail_hover_actions_transition: 0.23s;
-$thumbnail_hover_button_font_size: 1.2rem;
 
 $detail_global_padding: 15px;
 $detail_text_margin_bottom: 10px;
 
 div.image_actions {
   position: relative;
+  display: flex;
   width: $image_action_ratio;
 
   img.thumbnail {
@@ -26,19 +26,28 @@ div.image_actions {
     transition: opacity $thumbnail_hover_actions_transition ease;
   }
 
-  input.play {
+  i.watched {
     position: absolute;
+    width: 100%;
+    text-align: center;
     top: 50%;
-    right: 50%;
-    margin: auto;
+  }
+
+  button.play {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 30%;
     display: none;
-    font-size: $thumbnail_hover_button_font_size;
-    @include border_button(6rem, 3rem);
   }
 
   &:hover {
-    input.play {
+    button.play {
       display: block;
+    }
+
+    i.watched {
+      display: none;
     }
 
     img.thumbnail {

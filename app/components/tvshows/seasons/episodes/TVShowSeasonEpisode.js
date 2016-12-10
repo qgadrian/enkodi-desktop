@@ -9,8 +9,21 @@ export default class TVShowSeasonEpisode extends Component {
     season: PropTypes.number.isRequired,
     episode: PropTypes.number.isRequired,
     file: PropTypes.string.isRequired,
+    playcount: PropTypes.number.isRequired,
     onPlayEpisode: PropTypes.func.isRequired,
   };
+
+  getPlayButtonIconClass() {
+    return this.props.playcount > 0 ? 'player_replay' : 'player_play';
+  }
+
+  showCheckIfAlreadyWatched() {
+    if (this.props.playcount > 0) {
+      return (
+        <i className="watched" />
+      );
+    }
+  }
 
   handlePlayEpisode(file) {
     this.props.onPlayEpisode(file);
@@ -24,10 +37,10 @@ export default class TVShowSeasonEpisode extends Component {
       <div className="episode">
         <div className="image_actions">
           <img className="thumbnail" alt="thumbnail" src={parseThumbnailUrl(this.props.thumbnail)} />
-          <input
-            type="button" className="play" value="Play"
-            onClick={this.handlePlayEpisode.bind(this, this.props.file)}
-          />
+          {this.showCheckIfAlreadyWatched()}
+          <button className="play" value="Play" onClick={this.handlePlayEpisode.bind(this, this.props.file)} >
+            <i className={this.getPlayButtonIconClass()} />
+          </button>
         </div>
         <div className="details">
           <span className="title">{this.props.title}</span>
