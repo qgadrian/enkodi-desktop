@@ -40,6 +40,11 @@ export function playerOpenFile(file) {
   return { type: PLAYER_OPEN_FILE, params: { item: { file } } };
 }
 
+export const PLAYER_SEEK = 'PLAYER_SEEK';
+export function playerSeek(percentage) {
+  return { type: PLAYER_SEEK, params: { playerid: 1, value: { percentage } } };
+}
+
 // Events
 export const ON_PLAYER_STATUS_CHANGE = 'ON_PLAYER_STATUS_CHANGE';
 export function playerStatusChange(isPlaying) {

@@ -43,6 +43,10 @@ function matchDispatchToProps(dispatch) {
         kodiClient.Application.OnVolumeChanged((data) =>
           dispatch(volumeChange(data.data.volume))
         );
+
+        kodiClient.Player.OnSeek(() =>
+          refreshPlayerProperties(kodiClient, dispatch)
+        );
       });
     }
   };
@@ -70,11 +74,6 @@ function refreshPlayerProperties(kodiClient, dispatch) {
 function refreshPlayingInformationByVideoType(kodiClient, dispatch, type, itemId) {
   switch (type) {
     case 'episode': {
-      // const filter = { episodeid: itemId, properties: ['showtitle', 'title', 'season', 'episode'] };
-      // kodiClient.VideoLibrary.GetEpisodeDetails(filter).then((episodeData) => {
-      //   const { showtitle, season, title, episode } = episodeData.episodedetails;
-      //   return dispatch(PlayerActions.playingTvshowEpisode(showtitle, season, title, episode));
-      // }).catch((error) => console.error(`Using type [${type}] and id [${itemId}] thrown: ${error}`));
       handleDispatchEvent(kodiClient, dispatch, PlayerActions.getEpisodeDetails(itemId));
       break;
     }

@@ -12,6 +12,7 @@ class Player extends Component {
     onPlayerSatusChange: PropTypes.func.isRequired,
     onRefreshPlayerTime: PropTypes.func.isRequired,
     onRefreshPlayerDetails: PropTypes.func.isRequired,
+    onPlayerSeek: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
       connection: PropTypes.shape({
         client: PropTypes.object.isRequired,
@@ -48,7 +49,9 @@ class Player extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      seekLocked: false
+    };
   }
 
   componentWillMount() {
@@ -173,6 +176,15 @@ class Player extends Component {
     handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerStopAction());
   }
 
+  // SeekBar should be locked for a minor time to avoid a flood to the websocket and force close it
+  handleOnSeek(seekPercentage) {
+    if (!this.state.seekLocked) {
+      this.setState({ seekLocked: true });
+      this.props.onPlayerSeek(this.props.enkodi.connection.client, seekPercentage);
+      setTimeout(() => this.setState({ seekLocked: false }), 100);
+    }
+  }
+
   handleOnSubtitles() {
     console.log('subtitles');
   }
@@ -191,9 +203,10 @@ class Player extends Component {
             <span>{this.getCurrentPlayTimeString()}</span>
           </div>
           <SeekBar
-            min={0} max={100} disabled
+            min={0} max={100}
             value={this.props.enkodi.player.currentTime.percentage}
             tipFormatter={null}
+            onChange={this.handleOnSeek.bind(this)}
           />
         </div>
 

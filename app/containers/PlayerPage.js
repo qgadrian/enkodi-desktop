@@ -21,6 +21,9 @@ function matchDispatchToProps(dispatch) {
     },
     onPlayerSatusChange: (isPlaying) => {
       dispatch(PlayerActions.playerStatusChange(isPlaying));
+    },
+    onPlayerSeek: (kodiClient, seekPercentage) => {
+      handleDispatchEvent(kodiClient, dispatch, PlayerActions.playerSeek(seekPercentage));
     }
   };
 }

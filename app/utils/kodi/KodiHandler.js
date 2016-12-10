@@ -29,6 +29,12 @@ export function handleDispatchEvent(kodiClient, dispatch, action) {
       }).catch((error) => console.error(`Using [${action.filter}] error was thrown: ${error}`));
       break;
     }
+    case PlayerActions.PLAYER_SEEK: {
+      kodiClient.Player.Seek(action.params).then((playDetails) =>
+        dispatch(PlayerActions.playerPlayDetails(playDetails.percentage, playDetails.time, playDetails.totaltime))
+      ).catch((error) => console.error(error));
+      break;
+    }
     default: break;
   }
 }
