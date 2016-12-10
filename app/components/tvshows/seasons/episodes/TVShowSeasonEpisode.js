@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import parseThumbnailUrl from '../../../../utils/kodi/ImageUrlUtil';
 
 export default class TVShowSeasonEpisode extends Component {
   static propTypes = {
@@ -11,11 +12,6 @@ export default class TVShowSeasonEpisode extends Component {
     onPlayEpisode: PropTypes.func.isRequired,
   };
 
-  parseThumbnailUrl = (rawUrl) => {
-    const decodedUrl = decodeURIComponent(rawUrl.replace('image://', ''));
-    return decodedUrl.slice(0, -1);
-  }
-
   handlePlayEpisode(file) {
     this.props.onPlayEpisode(file);
   }
@@ -27,7 +23,7 @@ export default class TVShowSeasonEpisode extends Component {
     return (
       <div className="episode">
         <div className="image_actions">
-          <img className="thumbnail" alt="thumbnail" src={this.parseThumbnailUrl(this.props.thumbnail)} />
+          <img className="thumbnail" alt="thumbnail" src={parseThumbnailUrl(this.props.thumbnail)} />
           <input
             type="button" className="play" value="Play"
             onClick={this.handlePlayEpisode.bind(this, this.props.file)}

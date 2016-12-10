@@ -21,8 +21,11 @@ export function handleDispatchEvent(kodiClient, dispatch, action) {
     }
     case PlayerActions.GET_EPISODE_DETAILS: {
       kodiClient.VideoLibrary.GetEpisodeDetails(action.filter).then((episodeData) => {
-        const { showtitle, season, title, episode } = episodeData.episodedetails;
-        return dispatch(PlayerActions.playingTvshowEpisode(showtitle, season, title, episode));
+        const { showtitle, season, title, episode, plot,
+          art: { 'tvshow.poster': tvshowPoster }
+        } = episodeData.episodedetails;
+
+        return dispatch(PlayerActions.playingTvshowEpisode(showtitle, plot, season, title, episode, tvshowPoster));
       }).catch((error) => console.error(`Using [${action.filter}] error was thrown: ${error}`));
       break;
     }

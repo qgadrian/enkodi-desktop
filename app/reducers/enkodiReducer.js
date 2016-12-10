@@ -127,9 +127,11 @@ function player(state = playerInitialState, action: Object) {
         type: action.videoType,
         tvshow: {
           showTitle: action.showTitle,
+          plot: action.plot,
           seasonNumber: action.seasonNumber,
           episodeName: action.episodeName,
           episodeNumber: action.episodeNumber,
+          tvshowPoster: action.tvshowPoster
         }
       });
     default:

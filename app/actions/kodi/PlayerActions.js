@@ -19,7 +19,7 @@ export function getEpisodeDetails(episodeId) {
     type: GET_EPISODE_DETAILS,
     filter: {
       episodeid: episodeId,
-      properties: ['showtitle', 'title', 'season', 'episode']
+      properties: ['showtitle', 'title', 'plot', 'season', 'episode', 'art']
     }
   };
 }
@@ -90,13 +90,15 @@ export function playerRefreshPlayTime(currentTime) {
 }
 
 export const ON_PLAYING_TVSHOW_EPISODE = 'ON_PLAYING_TVSHOW_EPISODE';
-export function playingTvshowEpisode(showTitle, seasonNumber, episodeName, episodeNumber) {
+export function playingTvshowEpisode(showTitle, plot, seasonNumber, episodeName, episodeNumber, tvshowPoster) {
   return {
     type: ON_PLAYING_TVSHOW_EPISODE,
     videoType: 'episode',
     showTitle,
+    plot,
     seasonNumber,
     episodeName,
-    episodeNumber
+    episodeNumber,
+    tvshowPoster
   };
 }
