@@ -16,7 +16,7 @@ import {
 } from '../actions/kodi/ConnectionActions';
 
 // TODO this default state will be almost empty
-const connectionInitialState = {
+export const connectionInitialState = {
   info: {
     name: 'enkodi',
     host: '192.168.0.23',
@@ -34,6 +34,11 @@ const playerInitialState = {
   volume: 100,
 };
 
+export const defaultState = {
+  connection: connectionInitialState,
+  player: playerInitialState
+};
+
 function connection(state = connectionInitialState, action: Object) {
   switch (action.type) {
     case KODI_CONNECT: {
@@ -45,15 +50,15 @@ function connection(state = connectionInitialState, action: Object) {
     }
     case UPDATE_CONNECTION_NAME:
       return Object.assign({}, state, {
-        info: action.info
+        info: { name: action.name }
       });
     case UPDATE_CONNECTION_HOST:
       return Object.assign({}, state, {
-        name: action.host
+        info: { host: action.host }
       });
     case UPDATE_CONNECTION_PORT:
       return Object.assign({}, state, {
-        name: action.port
+        info: { port: action.port }
       });
     default:
       return state;

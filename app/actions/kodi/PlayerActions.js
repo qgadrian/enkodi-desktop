@@ -70,13 +70,13 @@ export function playerPlayDetails(percentage, currentTime, totalTime) {
       hours: currentTime.hours,
       minutes: currentTime.minutes,
       seconds: currentTime.seconds,
-      millis: currentTime.milliseconds
+      millis: currentTime.milliseconds || currentTime.millis
     },
     totalTime: {
       hours: totalTime.hours,
       minutes: totalTime.minutes,
       seconds: totalTime.seconds,
-      millis: totalTime.milliseconds
+      millis: totalTime.milliseconds || totalTime.millis
     }
   };
 }
