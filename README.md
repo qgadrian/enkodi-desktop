@@ -4,6 +4,18 @@
 
 WIP project
 
-Running with dev environment:
+### Run
 
-`npm run dev`
+You can use both `yarn` and `npm` to install dependencies or run the project.
+
+Run the project:
+```bash
+$ yarn run dev      # (or use `npm run dev`)
+```
+
+### Package
+
+Generate executable:
+```bash
+$ yarn run package      # (or use `npm run package`)
+```

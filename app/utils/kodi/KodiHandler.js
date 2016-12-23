@@ -4,14 +4,18 @@ const VolumeActions = require('../../actions/kodi/VolumeActions');
 const PlayerActions = require('../../actions/kodi/PlayerActions');
 const kodiWs = require('kodi-ws');
 
-export function createConnection(host, port, callback) {
+const KodiHandler = function () {
+  if (!(this instanceof KodiHandler)) return new KodiHandler();
+};
+
+KodiHandler.prototype.createConnection = (host, port, callback) => {
   console.log(`Connecting to Kodi in ${host}:${port}...`);
   kodiWs(host, port)
     .then((connection) => callback(connection))
     .catch((error) => { console.error(error); });
-}
+};
 
-export function handleDispatchEvent(kodiClient, dispatch, action) {
+KodiHandler.prototype.handleDispatchEvent = (kodiClient, dispatch, action) => {
   switch (action.type) {
     case PlayerActions.GET_PLAYER_PROPERTIES: {
       kodiClient.Player.GetProperties(action.filter).then((playDetails) =>
@@ -37,9 +41,9 @@ export function handleDispatchEvent(kodiClient, dispatch, action) {
     }
     default: break;
   }
-}
+};
 
-export function handleSendEvent(connection, action) {
+KodiHandler.prototype.handleSendEvent = (connection, action) => {
   switch (action.type) {
     // Input
     case InputActions.INPUT_UP:
@@ -115,4 +119,6 @@ export function handleSendEvent(connection, action) {
     default:
       return false;
   }
-}
+};
+
+module.exports = KodiHandler;

@@ -28,6 +28,7 @@ export const connectionInitialState = {
 const playerInitialState = {
   playing: false,
   hasPlayTimeInfo: false,
+  videoInfo: {},
   currentTime: {
     percentage: 0
   },
@@ -79,10 +80,10 @@ function player(state = playerInitialState, action: Object) {
           percentage: 0
         }
       });
-      switch (state.type) {
+      switch (state.videoInfo.type) {
         case 'episode': {
-          delete nextState.type;
-          delete nextState.tvshow;
+          delete nextState.videoInfo.type;
+          delete nextState.videoInfo.tvshow;
           break;
         }
         default: break;
@@ -129,14 +130,16 @@ function player(state = playerInitialState, action: Object) {
       });
     case ON_PLAYING_TVSHOW_EPISODE:
       return Object.assign({}, state, {
-        type: action.videoType,
-        tvshow: {
-          showTitle: action.showTitle,
-          plot: action.plot,
-          seasonNumber: action.seasonNumber,
-          episodeName: action.episodeName,
-          episodeNumber: action.episodeNumber,
-          tvshowPoster: action.tvshowPoster
+        videoInfo: {
+          type: action.videoType,
+          tvshow: {
+            showTitle: action.showTitle,
+            plot: action.plot,
+            seasonNumber: action.seasonNumber,
+            episodeName: action.episodeName,
+            episodeNumber: action.episodeNumber,
+            tvshowPoster: action.tvshowPoster
+          }
         }
       });
     default:

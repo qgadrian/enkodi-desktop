@@ -1,8 +1,8 @@
 // @flow
 import { connect } from 'react-redux';
-import Player from '../components/Player';
-import { handleDispatchEvent } from '../utils/kodi/KodiHandler';
+import Player from '../components/player/Player';
 
+const kodiHandler = require('../utils/kodi/KodiHandler')();
 const PlayerActions = require('../actions/kodi/PlayerActions');
 
 function matchDispatchToProps(dispatch) {
@@ -17,13 +17,10 @@ function matchDispatchToProps(dispatch) {
       dispatch(PlayerActions.playerRefreshPlayTime(currentTime));
     },
     onRefreshPlayerTime: (kodiClient) => {
-      handleDispatchEvent(kodiClient, dispatch, PlayerActions.getPlayerProperties());
-    },
-    onPlayerSatusChange: (isPlaying) => {
-      dispatch(PlayerActions.playerStatusChange(isPlaying));
+      kodiHandler.handleDispatchEvent(kodiClient, dispatch, PlayerActions.getPlayerProperties());
     },
     onPlayerSeek: (kodiClient, seekPercentage) => {
-      handleDispatchEvent(kodiClient, dispatch, PlayerActions.playerSeek(seekPercentage));
+      kodiHandler.handleDispatchEvent(kodiClient, dispatch, PlayerActions.playerSeek(seekPercentage));
     }
   };
 }

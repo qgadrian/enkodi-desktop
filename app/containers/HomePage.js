@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import Home from '../components/Home';
 import { volumeChange } from '../actions/kodi/VolumeActions';
 import { kodiConnect, connectionName, connectionHost, connectionPort } from '../actions/kodi/ConnectionActions';
-import { createConnection, handleDispatchEvent } from '../utils/kodi/KodiHandler';
 
+const kodiHandler = require('../utils/kodi/KodiHandler')();
 const PlayerActions = require('../actions/kodi/PlayerActions');
 
 function matchDispatchToProps(dispatch) {
@@ -22,7 +22,7 @@ function matchDispatchToProps(dispatch) {
     },
 
     onSaveAndConnect: (name, host, port) => {
-      createConnection(host, port, (kodiClient) => {
+      kodiHandler.createConnection(host, port, (kodiClient) => {
         dispatch(kodiConnect(name, host, port, kodiClient));
 
         kodiClient.Player.OnPlay((data) =>
@@ -68,13 +68,13 @@ function refreshPlayingInformation(kodiClient, dispatch, type, itemId) {
 }
 
 function refreshPlayerProperties(kodiClient, dispatch) {
-  handleDispatchEvent(kodiClient, dispatch, PlayerActions.getPlayerProperties());
+  kodiHandler.handleDispatchEvent(kodiClient, dispatch, PlayerActions.getPlayerProperties());
 }
 
 function refreshPlayingInformationByVideoType(kodiClient, dispatch, type, itemId) {
   switch (type) {
     case 'episode': {
-      handleDispatchEvent(kodiClient, dispatch, PlayerActions.getEpisodeDetails(itemId));
+      kodiHandler.handleDispatchEvent(kodiClient, dispatch, PlayerActions.getEpisodeDetails(itemId));
       break;
     }
     default:

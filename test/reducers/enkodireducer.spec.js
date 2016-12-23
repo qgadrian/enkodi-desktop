@@ -103,20 +103,20 @@ describe('reducers', () => {
     it('should remove any info for playing tvshow on stop player', () => {
       const playingState = enkodiReducer({}, PlayerActions.playerStatusChange(true));
       playingState.player.hasPlayTimeInfo = true;
-      playingState.player.type = 'episode';
-      playingState.player.tvshow = { showTitle: 'test', plot: 'test' };
+      playingState.player.videoInfo.type = 'episode';
+      playingState.player.videoInfo.tvshow = { showTitle: 'test', plot: 'test' };
 
       assert.isTrue(playingState.player.playing);
       assert.isTrue(playingState.player.hasPlayTimeInfo);
-      expect(playingState.player.tvshow).to.not.be.undefined;
-      assert.equal(playingState.player.type, 'episode');
+      expect(playingState.player.videoInfo.tvshow).to.not.be.undefined;
+      assert.equal(playingState.player.videoInfo.type, 'episode');
 
       const stoppedState = enkodiReducer(playingState, PlayerActions.playerStop());
 
       assert.isFalse(stoppedState.player.playing);
       assert.isFalse(stoppedState.player.hasPlayTimeInfo);
       expect(stoppedState.player.currentTime).to.deep.equal({ percentage: 0 });
-      expect(stoppedState.player.tvshow).to.be.undefined;
+      expect(stoppedState.player.videoInfo.tvshow).to.be.undefined;
     });
 
     it('should update all playing time info', () => {
@@ -165,8 +165,8 @@ describe('reducers', () => {
         PlayerActions.playingTvshowEpisode(tvShowInfo.showTitle, tvShowInfo.plot, tvShowInfo.seasonNumber,
           tvShowInfo.episodeName, tvShowInfo.episodeNumber, tvShowInfo.tvshowPoster));
 
-      assert.equal(withTvShowInfoState.player.type, 'episode');
-      expect(withTvShowInfoState.player.tvshow).to.deep.equal(tvShowInfo);
+      assert.equal(withTvShowInfoState.player.videoInfo.type, 'episode');
+      expect(withTvShowInfoState.player.videoInfo.tvshow).to.deep.equal(tvShowInfo);
     });
   });
 });

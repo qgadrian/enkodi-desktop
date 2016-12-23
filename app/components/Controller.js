@@ -1,8 +1,8 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
 import VolumeSlider from 'rc-slider';
-import { handleSendEvent } from '../utils/kodi/KodiHandler';
 
+const kodiHandler = require('../utils/kodi/KodiHandler')();
 const inputActions = require('../actions/kodi/InputActions');
 const volumeActions = require('../actions/kodi/VolumeActions');
 
@@ -111,39 +111,39 @@ class Controller extends Component {
   }
 
   handleOnUp() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputUpAction());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputUpAction());
   }
 
   handleOnDown() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputDownAction());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputDownAction());
   }
 
   handleOnRight() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputRightAction());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputRightAction());
   }
 
   handleOnLeft() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputLeftAction());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputLeftAction());
   }
 
   handleOnEnter() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputEnter());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputEnter());
   }
 
   handleOnMenu() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputMenu());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputMenu());
   }
 
   handleOnBack() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputBack());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputBack());
   }
 
   handleOnHome() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputHome());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputHome());
   }
 
   handleOnContextMenu() {
-    handleSendEvent(this.props.enkodi.connection.client, inputActions.inputContextMenu());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, inputActions.inputContextMenu());
   }
 
   handleScanLibrary() {
@@ -151,7 +151,7 @@ class Controller extends Component {
   }
 
   handleVolumeChange(volumeValue) {
-    handleSendEvent(this.props.enkodi.connection.client, volumeActions.audioSetVolume(volumeValue));
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, volumeActions.audioSetVolume(volumeValue));
     this.props.onVolumeChange(volumeValue);
   }
 

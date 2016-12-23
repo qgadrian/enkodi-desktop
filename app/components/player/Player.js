@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import SeekBar from 'rc-slider';
-import parseNumberAsTwoDigits from '../utils/Number';
-import { handleSendEvent } from '../utils/kodi/KodiHandler';
-import parseThumbnailUrl from '../utils/kodi/ImageUrlUtil';
+import PlayerControls from './../player/PlayerControls';
+import VideoInfo from './../player/VideoInfo';
+import parseNumberAsTwoDigits from '../../utils/Number';
 
-const PlayerActions = require('../actions/kodi/PlayerActions');
+const kodiHandler = require('../../utils/kodi/KodiHandler')();
+const PlayerActions = require('../../actions/kodi/PlayerActions');
 const moment = require('moment');
 
 class Player extends Component {
   static propTypes = {
-    onPlayerSatusChange: PropTypes.func.isRequired,
     onRefreshPlayerTime: PropTypes.func.isRequired,
     onRefreshPlayerDetails: PropTypes.func.isRequired,
     onPlayerSeek: PropTypes.func.isRequired,
@@ -19,14 +19,16 @@ class Player extends Component {
       }).isRequired,
       player: PropTypes.shape({
         playing: PropTypes.bool.isRequired,
-        type: PropTypes.string,
-        tvshow: PropTypes.shape({
-          showTitle: PropTypes.string.isRequired,
-          plot: PropTypes.string.isRequired,
-          seasonNumber: PropTypes.number.isRequired,
-          episodeName: PropTypes.string.isRequired,
-          episodeNumber: PropTypes.number.isRequired,
-          tvshowPoster: PropTypes.string.isRequired,
+        videoInfo: PropTypes.shape({
+          type: PropTypes.string,
+          tvshow: PropTypes.shape({
+            showTitle: PropTypes.string.isRequired,
+            plot: PropTypes.string.isRequired,
+            seasonNumber: PropTypes.number.isRequired,
+            episodeName: PropTypes.string.isRequired,
+            episodeNumber: PropTypes.number.isRequired,
+            tvshowPoster: PropTypes.string.isRequired,
+          })
         }),
         hasPlayTimeInfo: PropTypes.bool.isRequired,
         currentTime: PropTypes.shape({
@@ -105,41 +107,6 @@ class Player extends Component {
     return '';
   }
 
-  getVideoTypePlayDetail() {
-    if (this.props.enkodi.player.playing) {
-      switch (this.props.enkodi.player.type) {
-        case 'episode': {
-          const {
-            plot, showTitle, seasonNumber, episodeName, episodeNumber, tvshowPoster
-          } = this.props.enkodi.player.tvshow;
-
-          return (
-            <div className="detail">
-              <div className="poster">
-                <img className="poster" alt="tvshow_poster" src={parseThumbnailUrl(tvshowPoster)} />
-              </div>
-              <div className="info">
-                <div className="title">
-                  <span className="title">{showTitle}</span>
-                </div>
-                <div className="episode">
-                  <span className="name">{episodeName}</span>
-                </div>
-                <div className="season">
-                  <span className="season">{`Season ${seasonNumber}, episode ${episodeNumber}`}</span>
-                </div>
-                <div className="plot">
-                  <span className="plot">{plot}</span>
-                </div>
-              </div>
-            </div>
-          );
-        }
-        default: break;
-      }
-    }
-  }
-
   refreshCurrentPlayTime() {
     if (this.props.enkodi.player.hasPlayTimeInfo) {
       const seekBarTimer = setInterval(() => {
@@ -166,14 +133,11 @@ class Player extends Component {
   }
 
   handleOnPlayPause() {
-    if (this.props.enkodi.player.playing) {
-      handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerPlayPauseAction());
-      this.props.onPlayerSatusChange(!this.props.enkodi.player.playing);
-    }
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerPlayPauseAction());
   }
 
   handleOnStop() {
-    handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerStopAction());
+    kodiHandler.handleSendEvent(this.props.enkodi.connection.client, PlayerActions.playerStopAction());
   }
 
   // SeekBar should be locked for a minor time to avoid a flood to the websocket and force close it
@@ -185,17 +149,7 @@ class Player extends Component {
     }
   }
 
-  handleOnSubtitles() {
-    console.log('subtitles');
-  }
-
-  handleOnAudioChannel() {
-    console.log('audio');
-  }
-
   render() {
-    const buttonStyle = this.props.enkodi.player.playing ? 'player_pause' : 'player_play';
-
     return (
       <div className="player">
         <div className="seek_bar">
@@ -210,22 +164,13 @@ class Player extends Component {
           />
         </div>
 
-        <div className="actions">
-          <button className="play_pause" onClick={this.handleOnPlayPause.bind(this)}>
-            <i className={buttonStyle} />
-          </button>
-          <button className="stop" onClick={this.handleOnStop.bind(this)}>
-            <i className="player_stop" />
-          </button>
-          <button className="subtitles" onClick={this.handleOnSubtitles.bind(this)}>
-            <i className="player_subtitles" />
-          </button>
-          <button className="audio" onClick={this.handleOnAudioChannel.bind(this)}>
-            <i className="player_audio" />
-          </button>
-        </div>
+        <PlayerControls
+          playing={this.props.enkodi.player.playing}
+          onPlayPause={this.handleOnPlayPause.bind(this)}
+          onStop={this.handleOnStop.bind(this)}
+        />
 
-        {this.getVideoTypePlayDetail()}
+        <VideoInfo videoInfo={this.props.enkodi.player.videoInfo} />
       </div>
     );
   }
