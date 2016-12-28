@@ -63,7 +63,6 @@ function refreshPlayingInformation(kodiClient, dispatch, type, itemId) {
   if (somethingPlaying) {
     refreshPlayerProperties(kodiClient, dispatch);
     refreshPlayingInformationByVideoType(kodiClient, dispatch, type, itemId);
-    dispatch(PlayerActions.playerStatusChange(true));
   }
 }
 

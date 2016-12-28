@@ -4,7 +4,7 @@ const playerParams = { playerid: 1 }; // TODO replicated const
 export const GET_PLAYER_PROPERTIES = 'GET_PLAYER_PROPERTIES';
 const playerPropertiesFilter = {
   playerid: 1,
-  properties: ['percentage', 'time', 'totaltime', 'audiostreams', 'subtitles']
+  properties: ['percentage', 'time', 'totaltime', 'audiostreams', 'subtitles', 'speed']
 };
 export function getPlayerProperties() {
   return {
@@ -62,9 +62,10 @@ export function playerStop() {
 }
 
 export const ON_PLAYER_PLAY_DETAILS = 'ON_PLAYER_PLAY_DETAILS';
-export function playerPlayDetails(percentage, currentTime, totalTime) {
+export function playerPlayDetails(percentage, currentTime, totalTime, isPlaying) {
   return {
     type: ON_PLAYER_PLAY_DETAILS,
+    isPlaying,
     percentage,
     currentTime: {
       hours: currentTime.hours,

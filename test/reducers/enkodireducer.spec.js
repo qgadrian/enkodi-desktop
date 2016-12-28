@@ -127,13 +127,15 @@ describe('reducers', () => {
       assert.isFalse(defaultState.player.hasPlayTimeInfo);
 
       const updatedPlayInfoState = enkodiReducer({},
-        PlayerActions.playerPlayDetails(percentage, currentTime, totalTime));
+        PlayerActions.playerPlayDetails(percentage, currentTime, totalTime, true));
 
       expect(updatedPlayInfoState.player.totalTime).to.not.be.undefined;
       expect(updatedPlayInfoState.player.currentTime).to.not.be.undefined;
+      expect(updatedPlayInfoState.player.playing).to.not.be.undefined;
 
       assert.equal(updatedPlayInfoState.player.currentTime.percentage, percentage);
       assert.isTrue(updatedPlayInfoState.player.hasPlayTimeInfo);
+      assert.isTrue(updatedPlayInfoState.player.playing);
       expect(updatedPlayInfoState.player.currentTime).to.deep.equal(currentTime);
       expect(updatedPlayInfoState.player.totalTime).to.deep.equal(totalTime);
     });

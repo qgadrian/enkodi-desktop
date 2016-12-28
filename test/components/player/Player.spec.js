@@ -12,7 +12,9 @@ import KodiHandler from '../../../app/utils/kodi/KodiHandler';
 chai.should();
 chai.use(sinonChai);
 
-const handleSendEventStub = sinon.stub(KodiHandler.prototype, 'handleSendEvent');
+const stubHandleSendEvent = sinon.stub(KodiHandler.prototype, 'handleSendEvent');
+
+const stubOnRefreshPlayerTime = () => null;
 
 const defaultPlayingProps = {
   player: {
@@ -35,17 +37,17 @@ Player.propTypes = {
 describe('components: player', () => {
   describe('view render', () => {
     it('should contains a seekbar', () => {
-      const wrapper = mount(<Player enkodi={defaultPlayingProps} />);
+      const wrapper = mount(<Player enkodi={defaultPlayingProps} onRefreshPlayerTime={stubOnRefreshPlayerTime} />);
       expect(wrapper.find(SeekBar)).to.have.lengthOf(1);
     });
 
     it('should contains the player controls', () => {
-      const wrapper = mount(<Player enkodi={defaultPlayingProps} />);
+      const wrapper = mount(<Player enkodi={defaultPlayingProps} onRefreshPlayerTime={stubOnRefreshPlayerTime} />);
       expect(wrapper.find(PlayerControls)).to.have.lengthOf(1);
     });
 
     it('should contains the video info', () => {
-      const wrapper = mount(<Player enkodi={defaultPlayingProps} />);
+      const wrapper = mount(<Player enkodi={defaultPlayingProps} onRefreshPlayerTime={stubOnRefreshPlayerTime} />);
       expect(wrapper.find(VideoInfo)).to.have.lengthOf(1);
     });
   });
@@ -57,7 +59,7 @@ describe('components: player', () => {
 
       player.instance().handleOnPlayPause();
 
-      handleSendEventStub.should.have.been.calledAfter(spyHandleOnPause);
+      stubHandleSendEvent.should.have.been.calledAfter(spyHandleOnPause);
     });
 
     it('should request to the kodi client the stop action', () => {
@@ -66,7 +68,22 @@ describe('components: player', () => {
 
       player.instance().handleOnStop();
 
-      handleSendEventStub.should.have.been.calledAfter(spyHandleOnStop);
+      stubHandleSendEvent.should.have.been.calledAfter(spyHandleOnStop);
+    });
+
+    it('should request to the kodi client the stop action', () => {
+      const player = shallow(<Player enkodi={defaultPlayingProps} />);
+      const spyHandleOnStop = sinon.spy(player.instance(), 'handleOnStop');
+
+      player.instance().handleOnStop();
+
+      stubHandleSendEvent.should.have.been.calledAfter(spyHandleOnStop);
+    });
+
+    it('should start listening the playing status', () => {
+      sinon.spy(Player.prototype, 'refreshCurrentPlayTime');
+      mount(<Player enkodi={defaultPlayingProps} onRefreshPlayerTime={stubOnRefreshPlayerTime} />);
+      Player.prototype.refreshCurrentPlayTime.should.have.been.calledOnce;
     });
   });
 });

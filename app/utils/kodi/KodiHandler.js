@@ -19,7 +19,8 @@ KodiHandler.prototype.handleDispatchEvent = (kodiClient, dispatch, action) => {
   switch (action.type) {
     case PlayerActions.GET_PLAYER_PROPERTIES: {
       kodiClient.Player.GetProperties(action.filter).then((playDetails) =>
-        dispatch(PlayerActions.playerPlayDetails(playDetails.percentage, playDetails.time, playDetails.totaltime))
+        dispatch(PlayerActions.playerPlayDetails(
+          playDetails.percentage, playDetails.time, playDetails.totaltime, playDetails.speed !== 0))
       ).catch((error) => console.error(error));
       break;
     }
@@ -35,7 +36,8 @@ KodiHandler.prototype.handleDispatchEvent = (kodiClient, dispatch, action) => {
     }
     case PlayerActions.PLAYER_SEEK: {
       kodiClient.Player.Seek(action.params).then((playDetails) =>
-        dispatch(PlayerActions.playerPlayDetails(playDetails.percentage, playDetails.time, playDetails.totaltime))
+        dispatch(PlayerActions.playerPlayDetails(
+          playDetails.percentage, playDetails.time, playDetails.totaltime, playDetails.speed !== 0))
       ).catch((error) => console.error(error));
       break;
     }

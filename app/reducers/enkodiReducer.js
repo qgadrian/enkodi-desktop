@@ -99,6 +99,7 @@ function player(state = playerInitialState, action: Object) {
     }
     case ON_PLAYER_PLAY_DETAILS:
       return Object.assign({}, state, {
+        playing: action.isPlaying,
         hasPlayTimeInfo: true,
         currentTime: {
           percentage: action.percentage,

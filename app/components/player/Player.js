@@ -69,22 +69,14 @@ class Player extends Component {
     }
 
     if (!this.props.enkodi.player.playing) {
-      if (this.state.seekBarTimer) {
-        clearInterval(this.state.seekBarTimer);
-      }
-
-      if (this.state.percentageBarUpdateTimer) {
-        clearInterval(this.state.percentageBarUpdateTimer);
-      }
+      this.clearTimers();
     }
   }
 
 // TODO clear this wrongly used listeners
   componentDidMount() {
-    if (this.props.enkodi.player.playing) {
-      this.props.onRefreshPlayerTime(this.props.enkodi.connection.client);
-      this.refreshCurrentPlayTime();
-    }
+    this.props.onRefreshPlayerTime(this.props.enkodi.connection.client);
+    this.refreshCurrentPlayTime();
   }
 
   componentWillUnmount() {
@@ -105,6 +97,16 @@ class Player extends Component {
     }
 
     return '';
+  }
+
+  clearTimers() {
+    if (this.state.seekBarTimer) {
+      clearInterval(this.state.seekBarTimer);
+    }
+
+    if (this.state.percentageBarUpdateTimer) {
+      clearInterval(this.state.percentageBarUpdateTimer);
+    }
   }
 
   refreshCurrentPlayTime() {
