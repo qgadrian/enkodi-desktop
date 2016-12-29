@@ -34,6 +34,10 @@ Player.propTypes = {
   enkodi: PropTypes.shape({})
 };
 
+VideoInfo.propTypes = {
+  videoInfo: PropTypes.shape({})
+};
+
 describe('components: player', () => {
   describe('view render', () => {
     it('should contains a seekbar', () => {

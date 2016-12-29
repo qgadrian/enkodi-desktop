@@ -9,7 +9,7 @@ const KodiHandler = function () {
 };
 
 KodiHandler.prototype.createConnection = (host, port, callback) => {
-  console.log(`Connecting to Kodi in ${host}:${port}...`);
+  console.info(`Connecting to Kodi in ${host}:${port}...`);
   kodiWs(host, port)
     .then((connection) => callback(connection))
     .catch((error) => { console.error(error); });
@@ -45,81 +45,52 @@ KodiHandler.prototype.handleDispatchEvent = (kodiClient, dispatch, action) => {
   }
 };
 
+KodiHandler.prototype.handleGetData = (connection, action) => {
+  switch (action.type) {
+    case LibraryActions.LIBRARY_GET_TV_SHOWS:
+      return connection.VideoLibrary.GetTVShows(action.filter);
+    case LibraryActions.LIBRARY_GET_TV_SHOW_SEASONS:
+      return connection.VideoLibrary.GetSeasons(action.filter);
+    case LibraryActions.LIBRARY_GET_TV_SHOW_SEASON_EPISODES:
+      return connection.VideoLibrary.GetEpisodes(action.filter);
+    default: return null;
+  }
+};
+
 KodiHandler.prototype.handleSendEvent = (connection, action) => {
   switch (action.type) {
     // Input
     case InputActions.INPUT_UP:
-      return connection.Input.Up().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Up().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_DOWN:
-      return connection.Input.Down().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Down().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_RIGHT:
-      return connection.Input.Right().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Right().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_LEFT:
-      return connection.Input.Left().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Left().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_ENTER:
-      return connection.Input.Select().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Select().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_BACK:
-      return connection.Input.Back().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Back().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_MENU:
-      return connection.Input.ContextMenu().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.ContextMenu().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_HOME:
-      return connection.Input.Home().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.Home().then().catch((err) => console.error(err)); break;
     case InputActions.INPUT_CONTEXT_MENU:
-      return connection.Input.ContextMenu().then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Input.ContextMenu().then().catch((err) => console.error(err)); break;
 
     // Player
     case PlayerActions.PLAYER_OPEN_FILE:
-      return connection.connection.Player.Open(action.params).then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.connection.Player.Open(action.params).then().catch((err) => console.error(err)); break;
     case PlayerActions.PLAYER_PLAY_PAUSE:
-      return connection.Player.PlayPause(action.params).then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
+      connection.Player.PlayPause(action.params).then().catch((err) => console.error(err)); break;
     case PlayerActions.PLAYER_STOP:
-      return connection.Player.Stop(action.params).then(
-        (results) => console.log(results),
-        (err) => console.error(err)
-      );
-
-    // Library
-    case LibraryActions.LIBRARY_GET_MOVIES:
-      return connection.VideoLibrary.GetMovies();
+      connection.Player.Stop(action.params).then().catch((err) => console.error(err)); break;
 
     // Application
     case VolumeActions.AUDIO_SET_VOLUME:
-      return connection.Application.SetVolume(action.params);
-    default:
-      return false;
+      connection.Application.SetVolume(action.params); break;
+    default: break;
   }
 };
 

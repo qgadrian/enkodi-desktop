@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import TVShowSeason from './TVShowSeason';
 
+const kodiHandler = require('../../../utils/kodi/KodiHandler')();
+const LibraryActions = require('../../../actions/kodi/LibraryActions');
+
 export default class TVShowSeasons extends Component {
   static propTypes = {
     params: PropTypes.shape({
@@ -23,14 +26,9 @@ export default class TVShowSeasons extends Component {
   }
 
   componentDidMount() {
-    const self = this;
+    const tvshowid = Number(this.props.params.tvshowid);
 
-    const filter = {
-      tvshowid: Number(this.props.params.tvshowid),
-      properties: ['tvshowid', 'season', 'thumbnail']
-    };
-
-    this.props.enkodi.connection.client.VideoLibrary.GetSeasons(filter)
+    kodiHandler.handleGetData(this.props.enkodi.connection.client, LibraryActions.libraryGetTVShowSeasons(tvshowid))
       .then((data) => {
         const seasons = data.seasons.map((season) => (
           <TVShowSeason
@@ -41,12 +39,12 @@ export default class TVShowSeasons extends Component {
           />
         ));
 
-        self.setState({ seasons });
-        self.setState({ loading: false });
+        this.setState({ seasons });
+        this.setState({ loading: false });
         return true;
       }).catch((error) => {
         console.error(error);
-        self.setState({ loading: false });
+        this.setState({ loading: false });
       });
   }
 

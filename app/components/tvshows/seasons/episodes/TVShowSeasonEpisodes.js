@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import TVShowSeasonEpisode from './TVShowSeasonEpisode';
 
+const kodiHandler = require('../../../../utils/kodi/KodiHandler')();
+const LibraryActions = require('../../../../actions/kodi/LibraryActions');
+
 export default class TVShowSeasonEpisodes extends Component {
   static propTypes = {
     onPlayEpisode: PropTypes.func.isRequired,
@@ -44,15 +47,11 @@ export default class TVShowSeasonEpisodes extends Component {
   }
 
   refreshEpisodes = () => {
-    const self = this;
+    const tvshowid = Number(this.props.params.tvshowid);
+    const season = Number(this.props.params.season);
 
-    const filter = {
-      tvshowid: Number(this.props.params.tvshowid),
-      season: Number(this.props.params.season),
-      properties: ['title', 'plot', 'episode', 'showtitle', 'season', 'file', 'thumbnail', 'playcount']
-    };
-
-    this.props.enkodi.connection.client.VideoLibrary.GetEpisodes(filter)
+    kodiHandler.handleGetData(this.props.enkodi.connection.client,
+      LibraryActions.libraryGetTVShowSeasonEpisodes(tvshowid, season))
       .then((data) => {
         const episodes = data.episodes.map((episode) => (
           <TVShowSeasonEpisode
@@ -68,12 +67,12 @@ export default class TVShowSeasonEpisodes extends Component {
           />
         ));
 
-        self.setState({ episodes });
-        self.setState({ loading: false });
+        this.setState({ episodes });
+        this.setState({ loading: false });
         return true;
       }).catch((error) => {
         console.error(error);
-        self.setState({ loading: false });
+        this.setState({ loading: false });
       });
   }
 

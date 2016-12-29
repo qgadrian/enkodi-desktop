@@ -105,6 +105,7 @@
     "babel-register": "^6.18.0",
     "boiler-room-custodian": "^0.4.2",
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
     "chai-enzyme": "^0.6.1",
     "concurrently": "^3.1.0",
     "cross-env": "^3.1.3",

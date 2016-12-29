@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import TVShow from './TVShow';
 
+const kodiHandler = require('../../utils/kodi/KodiHandler')();
+const LibraryActions = require('../../actions/kodi/LibraryActions');
+
 export default class TVShows extends Component {
   static propTypes = {
-    // onPlayerPause: PropTypes.func.isRequired,
     enkodi: PropTypes.shape({
       connection: PropTypes.shape({
         client: PropTypes.object.isRequired
@@ -21,11 +23,7 @@ export default class TVShows extends Component {
   }
 
   componentDidMount() {
-    const self = this;
-
-    const filter = { properties: ['title', 'thumbnail'] };
-
-    this.props.enkodi.connection.client.VideoLibrary.GetTVShows(filter)
+    kodiHandler.handleGetData(this.props.enkodi.connection.client, LibraryActions.libraryGetTVShows())
       .then((data) => {
         const tvshows = data.tvshows.map((tvshow) => (
           <TVShow
@@ -36,12 +34,12 @@ export default class TVShows extends Component {
           />
         ));
 
-        self.setState({ tvshows });
-        self.setState({ loading: false });
+        this.setState({ tvshows });
+        this.setState({ loading: false });
         return true;
       }).catch((error) => {
         console.error(error);
-        self.setState({ loading: false });
+        this.setState({ loading: false });
       });
   }
 
