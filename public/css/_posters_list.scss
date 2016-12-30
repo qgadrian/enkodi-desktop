@@ -1,12 +1,27 @@
 @mixin posters_list($container_class, $element_class, $link_class) {
   div.#{$container_class} {
-    display: flex;
-    flex-flow: row wrap;
+    // display: flex;
+    // flex-flow: row wrap;
+
+    // columns: 150px;
+
+    display: table;
+    list-style: none;
+    padding: 0;
+    margin: auto;
+    clear: both;
+    width: 100%;
+    text-align: center;
 
     div.#{$element_class} {
-      width: 25%;
-      text-align: center;
-      margin-bottom: 20px;
+      // width: 25%;
+
+      // text-align: center;
+      // margin-bottom: 20px;
+      // display: inline-block;
+
+      float: left;
+      padding: 15px;
 
       a.#{$link_class} {
         text-decoration: none;

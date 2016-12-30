@@ -23,11 +23,23 @@ body {
   font: $font;
 }
 
+div.container {
+  position: absolute;
+  bottom: 0;
+  top: 100px;
+  width: 100%;
+
+  > div.center_content {
+    transform: translateY(25%);
+  }
+}
+
 // Menu
 
 div.main_menu {
   text-align: right;
-  margin-bottom: $menu_margin_bottom;
+  position: absolute;
+  width: 100%;
 
   a.view, button.back {
     text-decoration: none;
@@ -59,13 +71,15 @@ div.main_menu {
 
 // Home
 
-div.container {
+div#content {
   div.title {
     text-align: center;
   }
 
   div.configuration {
-    width: 100%;
+    width: 60%;
+    margin: auto;
+    text-align: center;
   }
 
   div.action {
@@ -88,14 +102,30 @@ div.container {
 
 // Player
 div.player {
+  width: 100%;
+
   div {
     margin-bottom: $player_container_common_margin_bottom;
   }
 
   div.seek_bar {
-    div.timer > span {
-      display: block;
-      text-align: right;
+    display: block;
+    width: 60%;
+    margin: auto;
+
+    div.timer {
+      display: inline-block;
+      width: 10%;
+
+      & > span {
+        display: block;
+        text-align: right;
+      }
+    }
+
+    div.rc-slider {
+      display: inline-block;
+      width: 90%;
     }
   }
 
@@ -105,6 +135,8 @@ div.player {
 
   div#detail {
     padding: $detail_container_padding;
+    width: $detail_container_width;
+    margin: auto;
 
     div.poster {
       display: inline-block;
@@ -119,7 +151,7 @@ div.player {
       margin-left: $player_info_margin_left;
       padding-top: $player_info_padding_top;
       display: inline-block;
-      position: absolute;
+      width: $player_info_width;
 
       div.title > span.title {
         font-size: -webkit-xxx-large;
@@ -152,7 +184,6 @@ div.controllers {
 
   div.control_buttons {
     width: 100%;
-    position: absolute;
     margin-top: $control_buttons_margin_top;
 
     div.input, div.actions {
@@ -178,25 +209,7 @@ div.controllers {
 @include posters_list('movies', 'movie', 'movie');
 
 // Tv shows
-div.tvshows {
-  display: flex;
-  flex-flow: row wrap;
-
-  div.tvshow {
-    width: 25%;
-    text-align: center;
-    margin-bottom: 20px;
-
-    a.seasons > span.title {
-      display: block;
-      margin-top: 10px;
-    }
-
-    img.thumbnail {
-      @include thumbnail_poster();
-    }
-  }
-}
+@include posters_list('tvshows', 'tvshow', 'seasons');
 
 @include posters_list('seasons', 'season', 'episodes');
 

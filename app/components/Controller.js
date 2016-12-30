@@ -161,7 +161,7 @@ class Controller extends Component {
 
   render() {
     return (
-      <div className="controllers">
+      <div className="controllers center_content">
         <p>{this.getConnectionStatusText()}</p>
 
         <div className="volume">

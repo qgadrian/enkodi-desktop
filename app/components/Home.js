@@ -51,52 +51,50 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
-        <div className="container">
-          <div className="title">
-            <h2>Configure your kodi...</h2>
-          </div>
-
-          <div className="configuration">
-            <div className="field">
-              <label htmlFor="name">Just a name for your server</label>
-              <input
-                id="name" type="text"
-                value={this.state.name}
-                onChange={this.handleOnNameChange.bind(this)}
-              />
-            </div>
-
-            <div className="field">
-              <label htmlFor="host">Server host name or address</label>
-              <input
-                id="host" type="text"
-                value={this.state.host}
-                onChange={this.handleOnHostChange.bind(this)}
-              />
-            </div>
-
-            <div className="field">
-              <label htmlFor="port">Websocket port</label>
-              <input
-                id="port" type="text"
-                value={this.state.port}
-                onChange={this.handleOnPortChange.bind(this)}
-              />
-            </div>
-          </div>
-
-          <div className="action">
-            <Link
-              className="connect"
-              onClick={() => this.props.onSaveAndConnect(this.state.name, this.state.host, this.state.port)}
-              to={{ pathname: '/controller' }}
-            >
-              <span>Save and connect!</span>
-            </Link>
-          </div>
-
+      <div id="content center_content">
+        <div className="title">
+          <h2>Configure your kodi...</h2>
         </div>
+
+        <div className="configuration">
+          <div className="field">
+            <label htmlFor="name">Just a name for your server</label>
+            <input
+              id="name" type="text"
+              value={this.state.name}
+              onChange={this.handleOnNameChange.bind(this)}
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="host">Server host name or address</label>
+            <input
+              id="host" type="text"
+              value={this.state.host}
+              onChange={this.handleOnHostChange.bind(this)}
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="port">Websocket port</label>
+            <input
+              id="port" type="text"
+              value={this.state.port}
+              onChange={this.handleOnPortChange.bind(this)}
+            />
+          </div>
+        </div>
+
+        <div className="action">
+          <Link
+            className="button connect"
+            onClick={() => this.props.onSaveAndConnect(this.state.name, this.state.host, this.state.port)}
+            to={{ pathname: '/controller' }}
+          >
+            <span>Save and connect!</span>
+          </Link>
+        </div>
+
       </div>
     );
   }

@@ -153,17 +153,17 @@ class Player extends Component {
 
   render() {
     return (
-      <div className="player">
+      <div className="player center_content">
         <div className="seek_bar">
-          <div className="timer">
-            <span>{this.getCurrentPlayTimeString()}</span>
-          </div>
           <SeekBar
             min={0} max={100}
             value={this.props.enkodi.player.currentTime.percentage}
             tipFormatter={null}
             onChange={this.handleOnSeek.bind(this)}
           />
+          <div className="timer">
+            <span>{this.getCurrentPlayTimeString()}</span>
+          </div>
         </div>
 
         <PlayerControls
